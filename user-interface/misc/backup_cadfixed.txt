@@ -1,0 +1,449 @@
+// _updateScene() {
+	// 	scene.remove(this._obj);
+
+	// 	// need to first center the geometry
+	// 	this.translateGeometry()
+	// 	this._joint3.add(this._link4);
+	// 	this._link3.add(this._joint3);
+	// 	this._joint2.add(this._link3);
+	// 	this._link2.add(this._joint2);
+	// 	this._joint1.add(this._link2);
+	// 	this._link1.add(this._joint1);
+	// 	this._joint0.add(this._link1);
+	// 	this._base.add(this._joint0);
+
+	// 	this.rotateR(this._base, this._initialR);
+
+	// 	this._base.position.copy(this._bboxCenter);
+	// 	scene.add(this._base);
+	// }
+
+	// translateGeometry() {
+	// 	var base = new THREE.Group();
+	// 	base.position.set(0,0,0);
+	// 	this._base = base;
+	// 	var pivot0 = this._pivot0;
+	// 	var pivot1 = this._pivot1;
+	// 	var pivot2 = this._pivot2;
+	// 	var pivot3 = this._pivot3;
+	// 	this._link4.geometry.translate(-pivot3.position.x, -pivot3.position.y, -pivot3.position.z);
+	// 	this._link3.geometry.translate(-pivot2.position.x, -pivot2.position.y, -pivot2.position.z);
+	// 	this._link2.geometry.translate(-pivot1.position.x, -pivot1.position.y, -pivot1.position.z);
+	// 	this._link1.geometry.translate(-pivot0.position.x, -pivot0.position.y, -pivot0.position.z);
+	// 	var joint0 = new THREE.Group();
+	// 	var joint1 = new THREE.Group();
+	// 	var joint2 = new THREE.Group();
+	// 	var joint3 = new THREE.Group();
+	// 	joint0.position.copy(pivot0.position.clone().sub(base.position));
+	// 	joint1.position.copy(pivot1.position.clone().sub(pivot0.position));
+	// 	joint2.position.copy(pivot2.position.clone().sub(pivot1.position));
+	// 	joint3.position.copy(pivot3.position.clone().sub(pivot2.position));
+	// 	this._joint0 = joint0;
+	// 	this._joint1 = joint1;
+	// 	this._joint2 = joint2;
+	// 	this._joint3 = joint3;
+
+		
+	// }
+
+
+
+
+
+
+
+
+_animate(target_q, q0) {
+		var secondIndex;
+		var joint0ang = target_q[0] - q0[0];
+		var joint2ang = target_q[4] - q0[4];
+		var joint3ang = target_q[5] - q0[5];
+		switch (this._jtType){
+			case 1:
+				secondIndex = 2;
+				var joint1ang = target_q[secondIndex] - q0[secondIndex];
+				this._joint1.rotation.x += joint1ang;
+				break;
+			case 2:
+				secondIndex = 3;
+				var joint1ang = target_q[secondIndex] - q0[secondIndex];
+				this._joint1.rotation.y += joint1ang;
+				break;
+			case 3:
+				secondIndex = 1;
+				var joint1ang = target_q[secondIndex] - q0[secondIndex];
+				this._joint1.rotation.z += joint1ang;
+				break;
+		}
+		
+		this._joint0.rotation.z += joint0ang;
+		this._joint2.rotation.z += joint2ang;
+		this._joint3.rotation.z += joint3ang;
+
+	}
+
+	linkFirst() {
+		// split the third link
+		var xmin = this._bboxParamsNew.cmin.x;
+		var xmax = this._bboxParamsNew.cmax.x;
+		var ymin = this._bboxParamsNew.cmin.y;
+		var ymax = this._bboxParamsNew.cmax.y;
+		var zmin = this._bboxParamsNew.cmin.z;
+		var zmax = this._bboxParamsNew.cmax.z;
+
+		var linkPointArray = [[0,0], [0, ymax], [xmin, ymax], [xmin, 0]];
+
+		var cuttingCtr = new THREE.Vector3(xmin/2, ymax/2, 0);
+		var cuttingShape = polygonExtrude(linkPointArray, this._bboxParamsNew.lenz+1, cuttingCtr);
+		var linkGeo = booleanGeo(this._meshTransNew, cuttingShape, INTERSECT);
+		var linkMesh = new THREE.Mesh(linkGeo);
+		var bboxParams = getBoundingBoxEverything(linkMesh);
+
+		var linkShell = linkMesh;
+		var LINK = linkMesh;
+
+		var jointPrev = ljhBoxMeshFromPoints(-24, 0, ymax-40, ymax, zmin, zmin+3);
+		var jointPrevHole = ljhCylinderMeshFromPoint(-14, ymax-11, zmin, zmin+3, 2.8);
+		LINK = booleanGeo(LINK, jointPrev, UNION);
+		LINK = booleanGeo(LINK, jointPrevHole, UNION);
+		this._pivot0 = new THREE.Group();
+		this._pivot0.position.set(-14, ymax-11, 0);
+		
+		switch (this._jtType) {
+			case 1:
+				var motorPos = new THREE.Vector3((xmin/2), 24, 0);
+				this._link1MotorPos = motorPos;
+				var motorMount = ljhBoxMeshFromPoints(motorPos.x-12, motorPos.x+12, motorPos.y-20, motorPos.y+20, -14, 14);
+				var motor = ljhBoxMeshFromPoints(xmin, xmax, motorPos.y-18, motorPos.y+18, -12, 12);
+				LINK = booleanGeo(LINK, motorMount, UNION);
+				LINK = booleanGeo(LINK, motor, SUBTRACT);
+
+				// joint rail
+				var jointRailActive = ljhBoxMeshFromPoints(motorPos.x-20, motorPos.x-15, 0, 20, zmin, zmax);
+				var jointRailPassive = ljhBoxMeshFromPoints(motorPos.x+12, motorPos.x+17, 0, 20, zmin, zmax);
+				LINK = booleanGeo(LINK, jointRailActive, SUBTRACT);
+				LINK = booleanGeo(LINK, jointRailPassive, SUBTRACT);
+
+				this._link1JointPos = new THREE.Vector3((xmin/2), 15, 0);
+				break;
+			case 2:
+				// motor mount
+				var motorMountCenter = new THREE.Vector3(xmin+20, 13, 0);
+				var motorMount = ljhBoxMesh(40, 26, motorMountCenter, -14, 14);
+				// motor
+				var motorCenter = new THREE.Vector3(xmin+20, 12, 0);
+				var motor = ljhBoxMesh(36, 24, motorCenter, -12, 12);
+
+				LINK = booleanGeo(LINK, motorMount, UNION);
+				LINK = booleanGeo(LINK, motor, SUBTRACT);
+
+				this._link1JointPos = new THREE.Vector3(11, 13, 0);
+				break;
+
+			case 3:
+				if (bboxParams.lenx + 1 >= bboxParams.leny) {
+					var motorMount = ljhBoxMeshFromPoints(xmin, xmin+40, 2, 30, -14, 14);
+					var motor = ljhBoxMeshFromPoints(xmin+2, xmin+38, 4, 28, zmin, zmax);
+					LINK = booleanGeo(LINK, motorMount, UNION);
+					LINK = booleanGeo(LINK, motor, SUBTRACT);
+					var jointPos = new THREE.Vector3(xmin+11, 16, 0);
+				} else {
+					var motorMount = ljhBoxMeshFromPoints(xmin, xmin+28, 6, 46, -14, 14);
+					var motor = ljhBoxMeshFromPoints(xmin+2, xmin+26, 8, 34, zmin, zmax);
+					LINK = booleanGeo(LINK, motorMount, UNION);
+					LINK = booleanGeo(LINK, motor, SUBTRACT);
+					var jointPos = new THREE.Vector3(xmin+14, 15, 0);
+				}
+				this._link1JointPos = jointPos;
+
+				// round corner
+				var filletToCut = roundCorner(jointPos.x, jointPos.y, xmin, 0, zmin, zmax);
+				LINK = booleanGeo(LINK, filletToCut, SUBTRACT);
+
+				// joint rail
+				var jointLength = jointPos.distanceTo(new THREE.Vector3(xmin, 0,0));
+				var jointRailActive = ljhCylinderMeshFromPoint(jointPos.x, jointPos.y, 15, 20, jointLength);
+				var jointRailPassive = ljhCylinderMeshFromPoint(jointPos.x, jointPos.y, -17, -12, jointLength);
+
+				LINK = booleanGeo(LINK, jointRailActive, SUBTRACT);
+				LINK = booleanGeo(LINK, jointRailPassive, SUBTRACT);
+
+				// joint support
+				var jointRevolute = revoluteJoint(jointPos.x, jointPos.y, jointPos.x-9, jointPos.x+9, jointPos.y, 0, -19.5, -16.5, 9);
+				LINK = booleanGeo(LINK, jointRevolute, UNION);
+
+
+				break;
+		}
+		this._pivot1 = new THREE.Group();
+		this._pivot1.position.copy(this._link1JointPos);
+
+		return new THREE.Mesh(LINK, MATERIALNORMAL);
+		
+
+
+	}
+
+	linkSecond() {
+		// split the third link
+		var xmin = this._bboxParamsNew.cmin.x;
+		var xmax = this._bboxParamsNew.cmax.x;
+		var ymin = this._bboxParamsNew.cmin.y;
+		var ymax = this._bboxParamsNew.cmax.y;
+		var zmin = this._bboxParamsNew.cmin.z;
+		var zmax = this._bboxParamsNew.cmax.z;
+
+		var linkPointArray = [[0,0], [0, ymin], [xmin, ymin], [xmin, 0]];
+
+		var cuttingCtr = new THREE.Vector3(xmin/2, ymin/2, 0);
+		var cuttingShape = polygonExtrude(linkPointArray, this._bboxParamsNew.lenz+1, cuttingCtr);
+		var linkGeo = booleanGeo(this._meshTransNew, cuttingShape, INTERSECT);
+		var linkMesh = new THREE.Mesh(linkGeo);
+		var bboxParams = getBoundingBoxEverything(linkMesh);
+
+		var linkShell = linkMesh;
+		var LINK = linkMesh;
+
+		// joint linking the previous joint
+		switch (this._jtType) {
+			case 1:
+				var motorPrev = this._link1MotorPos;
+				var jointPrev = motorPrev.clone();
+				jointPrev.y -= 9;
+				var jointRevolutePrevActive = revoluteJointX(jointPrev.y, 0, jointPrev.x-18.5, jointPrev.x-15.5, 0, jointPrev.y, -9, 9, 9);
+				var jointRevolutePrevPassive = revoluteJointX(jointPrev.y, 0, jointPrev.x+12.5, jointPrev.x+15.5, 0, jointPrev.y, -9, 9, 9);
+				LINK = booleanGeo(LINK, jointRevolutePrevActive, UNION);
+				LINK = booleanGeo(LINK, jointRevolutePrevPassive, UNION);
+
+				break;
+			case 2:
+				var wall = ljhBoxMeshFromPoints(xmin, xmin+40, -3, 0, zmin, zmax);
+				var rivet = ljhCylinderMeshY(xmin+11, 0, 0, 0.5, 9);
+				LINK = booleanGeo(LINK, wall, UNION);
+				LINK = booleanGeo(LINK, rivet, UNION);
+				break;
+			case 3:
+				var jointPosPrev = this._link1JointPos;
+				var jointPrevActive = revoluteJoint(jointPosPrev.x, jointPosPrev.y, jointPosPrev.x-9, jointPosPrev.x+9, 0, jointPosPrev.y, 15.5, 18.5, 9);
+				var jointPrevPassive = revoluteJoint(jointPosPrev.x, jointPosPrev.y, jointPosPrev.x-9, jointPosPrev.x+9, 0, jointPosPrev.y, -15.5, -12.5, 9);
+				LINK = booleanGeo(LINK, jointPrevActive, UNION);
+				LINK = booleanGeo(LINK, jointPrevPassive, UNION);
+				break;
+
+		}
+
+		if (bboxParams.leny + 1 >= bboxParams.lenx) {
+			var motorMount = ljhBoxMeshFromPoints(-30, -2, ymin, ymin+40, -14, 14);
+			var motor = ljhBoxMeshFromPoints(-28, -4, ymin+2, ymin+38, Math.min(-14, zmin), Math.max(14,zmax));
+			LINK = booleanGeo(LINK, motorMount, UNION);
+			LINK = booleanGeo(LINK, motor, SUBTRACT);
+			var jointPos = new THREE.Vector3(-16, ymin+11, 0);
+		} else {
+			var motorMount = ljhBoxMeshFromPoints(-44, -4, ymin, ymin+28, -14, 14);
+			var motor = ljhBoxMeshFromPoints(-42, -6, ymin+2, ymin+26, Math.min(-14, zmin), Math.max(14,zmax));
+			LINK = booleanGeo(LINK, motorMount, UNION);
+			LINK = booleanGeo(LINK, motor, SUBTRACT);
+			var jointPos = new THREE.Vector3(-15, ymin+14, 0);
+		}
+
+		this._pivot2 = new THREE.Group();
+		this._pivot2.position.copy(jointPos);
+
+		// joint rail
+		var jointLength = jointPos.distanceTo(new THREE.Vector3(0, ymin, 0));
+		var jointRailActive = ljhCylinderMeshFromPoint(jointPos.x, jointPos.y, 15, 20, jointLength);
+		var jointRailPassive = ljhCylinderMeshFromPoint(jointPos.x, jointPos.y, -17, -12, jointLength);
+
+		LINK = booleanGeo(LINK, jointRailActive, SUBTRACT);
+		LINK = booleanGeo(LINK, jointRailPassive, SUBTRACT);
+
+		// joint support
+		var jointRevolute = revoluteJoint(jointPos.x, jointPos.y, jointPos.x, 0, jointPos.y-9, jointPos.y+9, -19.5, -16.5, 9);
+		LINK = booleanGeo(LINK, jointRevolute, UNION);
+
+		// wall
+		var wall = ljhBoxMeshFromPoints(-3, 0, ymin+2, ymin+40, -20, 0);
+		LINK = booleanGeo(LINK, wall, UNION);
+
+		// round corner
+		var filletToCut = roundCorner(jointPos.x, jointPos.y, 0, ymin, zmin-100, zmax+100);
+		LINK = booleanGeo(LINK, filletToCut, SUBTRACT);
+
+		return new THREE.Mesh(LINK, MATERIALGREEN);
+		
+	}
+
+	linkThird() {
+		// split the third link
+		var xmin = this._bboxParamsNew.cmin.x;
+		var xmax = this._bboxParamsNew.cmax.x;
+		var ymin = this._bboxParamsNew.cmin.y;
+		var ymax = this._bboxParamsNew.cmax.y;
+		var zmin = this._bboxParamsNew.cmin.z;
+		var zmax = this._bboxParamsNew.cmax.z;
+
+		var link3PointArray = [[0,0], [0, ymin], [xmax, ymin], [xmax, 0]];
+
+		// var index = (3-1)*2;
+		// var bboxArray = this._bboxPointArray;
+		// bboxArray[index] = [0,0];
+		var cuttingCtr = new THREE.Vector3(xmax/2, ymin/2, 0);
+		var cuttingShape = polygonExtrude(link3PointArray, this._bboxParamsNew.lenz+1, cuttingCtr);
+		var link3Geo = booleanGeo(this._meshTransNew, cuttingShape, INTERSECT);
+		var link3Mesh = new THREE.Mesh(link3Geo);
+		var bboxParams = getBoundingBoxEverything(link3Mesh);
+
+		// shell the link
+		// var link3Shell = ljhShellMesh(link3Mesh, this._meshTransNew);
+		var link3Shell = link3Mesh;
+		if (bboxParams.lenx + 1 >= bboxParams.leny) {
+			// add the mount for the motor
+			var motorPos = new THREE.Vector3(xmax-20, -16, 0);
+			var motorMount = ljhBoxMesh(40, 28, motorPos, motorPos.z-14, motorPos.z+14);
+			var motor = ljhBoxMesh(36, 24, motorPos, zmin, zmax);
+			var motorWhole = booleanGeo(link3Shell, motorMount, UNION);
+			var wholeMinusMotor = booleanGeo(new THREE.Mesh(motorWhole), motor, SUBTRACT);
+			var jointPos = new THREE.Vector3(xmax-11, -16, 0);
+		} else {
+			var motorPos = new THREE.Vector3(xmax-14, -24, 0);
+			var motorMount = ljhBoxMesh(28, 40, motorPos, motorPos.z-14, motorPos.z+14);
+			var motor = ljhBoxMesh(24, 36, motorPos, zmin, zmax);
+			var motorWhole = booleanGeo(link3Shell, motorMount, UNION);
+			var wholeMinusMotor = booleanGeo(new THREE.Mesh(motorWhole), motor, SUBTRACT);
+			var jointPos = new THREE.Vector3(xmax-14, -15, 0);
+		}
+		this._link3JointPos = jointPos;
+		this._pivot3 = new THREE.Group();
+		this._pivot3.position.copy(jointPos);
+
+		// round the edge to avoid self intersection
+		var filletRadius = Math.abs(jointPos.y);
+		var fillet = ljhCylinderMesh(jointPos, filletRadius, zmax-zmin);
+		var cubeCenter = jointPos.clone().add(new THREE.Vector3(xmax, 0, 0)).divideScalar(2);
+		var filletCube = ljhBoxMesh(xmax-jointPos.x, 0-jointPos.y, cubeCenter, zmin, zmax);
+		var filletToCut = booleanGeo(filletCube, fillet, SUBTRACT);
+
+		var filletToCut = new THREE.Mesh(filletToCut);
+		var LINK3FINAL = booleanGeo(wholeMinusMotor, filletToCut, SUBTRACT);
+		// filletToCut.position.copy(filletCube.position);
+		// filletToCut.updateMatrixWorld();
+		// filletToCut.geometry.applyMatrix(filletToCut.matrixWorld);
+		// filletToCut.material = MATERIALGREEN;
+		// filletToCut.position.y += 150;
+		// scene.add(filletToCut);
+		// fillet.material = MATERIALNORMAL;
+		// filletCube.material = MATERIALGREEN;
+		// fillet.position.y += 150;
+		// filletCube.position.y += 150;
+		// scene.add(fillet);
+		// scene.add(filletCube);
+
+		// add hole for joints to move
+		var jointLength = jointPos.distanceTo(new THREE.Vector3(xmax, 0,0));
+		var jointHoleActive = ljhCylinderMesh(jointPos, jointLength, 5);
+		jointHoleActive.position.z += 17.5;
+		var jointHolePassive = ljhCylinderMesh(jointPos, jointLength, 5);
+		jointHolePassive.position.z -= 14.5;
+
+
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointHoleActive, SUBTRACT);
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointHolePassive, SUBTRACT);
+
+		// check which axis is parallel to on link 2
+		if (ymax >= xmax) {
+			var jointPosLink2 = new THREE.Vector3(-16, ymin+11, 0);
+		} else {
+			var jointPosLink2 = new THREE.Vector3(-15, ymin+14, 0);
+		}
+		// add joint linking the previous link
+
+		var jointPrismCenter = new THREE.Vector3(jointPosLink2.x/2, jointPosLink2.y, 0);
+		var jointActivePrism = ljhBoxMesh(-jointPosLink2.x, 18, jointPrismCenter, 15.5, 15.5+3);
+		var jointActiveCylinder = ljhCylinderMesh(jointPosLink2, 9, 3);
+		jointActiveCylinder.position.z += 17;
+
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointActiveCylinder, UNION);
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointActivePrism, UNION);
+
+		var jointPassivePrism = ljhBoxMesh(-jointPosLink2.x, 18, jointPrismCenter, -12.5-3, -12.5);
+		var jointPassiveCylinder = ljhCylinderMesh(jointPosLink2, 9, 3);
+		jointPassiveCylinder.position.z -= 14;
+
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointPassiveCylinder, UNION);
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointPassivePrism, UNION);
+
+		var wallThickness = 5;
+		var jointWallCenter = new THREE.Vector3(wallThickness/2, jointPosLink2.y, 0);
+		var jointWall = ljhBoxMesh(wallThickness, (jointPosLink2.y-ymin)*2, jointWallCenter, zmin, zmax);
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointWall, UNION);
+
+		// add joint linking the next link;
+		var jointFollowPrismCenter = new THREE.Vector3(jointPos.x, jointPos.y/2, 0)
+		var jointFollowPrism = ljhBoxMesh(18, -jointPos.y, jointFollowPrismCenter, -19.5, -16.5);
+		var jointFollowCylinder = ljhCylinderMesh(jointPos, 9, 3);
+		jointFollowCylinder.position.z -= 18;
+
+		var jointWallCenterFollow = new THREE.Vector3(jointPos.x, wallThickness/2, 0);
+		var jointWallFollow = ljhBoxMesh((xmax-jointPos.x)*2, wallThickness, jointWallCenterFollow, zmin, -17);
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointWallFollow, UNION);
+
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointFollowCylinder, UNION);
+		LINK3FINAL = booleanGeo(LINK3FINAL, jointFollowPrism, UNION);
+
+		LINK3FINAL = booleanGeo(LINK3FINAL, filletToCut, SUBTRACT)
+
+		// add holes for fastening
+		return new THREE.Mesh(LINK3FINAL, MATERIALNORMAL);
+	}
+
+	linkForth() {
+		// split the third link
+		var xmin = this._bboxParamsNew.cmin.x;
+		var xmax = this._bboxParamsNew.cmax.x;
+		var ymin = this._bboxParamsNew.cmin.y;
+		var ymax = this._bboxParamsNew.cmax.y;
+		var zmin = this._bboxParamsNew.cmin.z;
+		var zmax = this._bboxParamsNew.cmax.z;
+
+		var link4PointArray = [[0,0], [0, ymax], [xmax, ymax], [xmax, 0]];
+
+		var cuttingCtr = new THREE.Vector3(xmax/2, ymax/2, 0);
+		var cuttingShape = polygonExtrude(link4PointArray, this._bboxParamsNew.lenz+1, cuttingCtr);
+		var linkGeo = booleanGeo(this._meshTransNew, cuttingShape, INTERSECT);
+		var linkMesh = new THREE.Mesh(linkGeo);
+		var bboxParams = getBoundingBoxEverything(linkMesh);
+
+		// shell the link
+		var linkShell = ljhShellMesh(linkMesh, this._meshTransNew);
+		linkShell = linkMesh;
+		var LINKFINAL = linkShell;
+
+		if (this._taskType == 1) {
+			// add gripper
+
+			// subtract the wall
+		}
+
+		// add joint linking the previous link
+		// check which axis is parallel to on link 2
+		
+		var jointPosPrev = this._link3JointPos;
+
+		var jointPrismCenter = new THREE.Vector3(jointPosPrev.x, jointPosPrev.y/2, 0);
+		var jointActivePrism = ljhBoxMesh(18, -jointPosPrev.y, jointPrismCenter, 15.5, 15.5+3);
+		var jointActiveCylinder = ljhCylinderMesh(jointPosPrev, 9, 3);
+		jointActiveCylinder.position.z += 17;
+
+		LINKFINAL = booleanGeo(LINKFINAL, jointActiveCylinder, UNION);
+		LINKFINAL = booleanGeo(LINKFINAL, jointActivePrism, UNION);
+
+		var jointPassivePrism = ljhBoxMesh(18, -jointPosPrev.y, jointPrismCenter, -12.5-3, -12.5);
+		var jointPassiveCylinder = ljhCylinderMesh(jointPosPrev, 9, 3);
+		jointPassiveCylinder.position.z -= 14;
+
+		LINKFINAL = booleanGeo(LINKFINAL, jointPassiveCylinder, UNION);
+		LINKFINAL = booleanGeo(LINKFINAL, jointPassivePrism, UNION);
+
+		return new THREE.Mesh(LINKFINAL, MATERIALGREEN);
+
+	}

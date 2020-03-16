@@ -1,0 +1,107 @@
+mcc -W CTF:main_func -U -d '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/main_func/for_testing' -v '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/compare_res.m' '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/dh_obj_fixed.m' '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/dh_obj_moving.m' '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/findNearestPoint.m' '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/generateWorkspace.m' '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/main_func.m' '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/simplified_T.m' 
+Compiler version: 6.1 (R2015b)
+
+Dependency analysis by REQUIREMENTS.
+
+[Warning: Adding path "/Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab" to Compiler path
+instance.] 
+[] 
+[Warning: Adding path "/Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab" to Compiler path
+instance.] 
+[] 
+[Warning: Duplicate directory name: /Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab] 
+[] 
+[Warning: Adding path "/Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab" to Compiler path
+instance.] 
+[] 
+[Warning: Duplicate directory name: /Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab] 
+[] 
+[Warning: Adding path "/Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab" to Compiler path
+instance.] 
+[] 
+[Warning: Duplicate directory name: /Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab] 
+[] 
+[Warning: Adding path "/Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab" to Compiler path
+instance.] 
+[] 
+[Warning: Duplicate directory name: /Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab] 
+[] 
+[Warning: Adding path "/Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab" to Compiler path
+instance.] 
+[] 
+[Warning: Duplicate directory name: /Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab] 
+[] 
+[Warning: Adding path "/Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab" to Compiler path
+instance.] 
+[] 
+[Warning: Duplicate directory name: /Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab] 
+[] 
+Parsing file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/compare_res.m"
+	(Referenced from: "Compiler Command Line").
+Parsing file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/dh_obj_fixed.m"
+	(Referenced from: "Compiler Command Line").
+Parsing file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/dh_obj_moving.m"
+	(Referenced from: "Compiler Command Line").
+Parsing file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/findNearestPoint.m"
+	(Referenced from: "Compiler Command Line").
+Parsing file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/generateWorkspace.m"
+	(Referenced from: "Compiler Command Line").
+Parsing file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/main_func.m"
+	(Referenced from: "Compiler Command Line").
+Parsing file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/simplified_T.m"
+	(Referenced from: "Compiler Command Line").
+Deleting 38 temporary MEX authorization files.
+Removing: '/tmp/01d741PNxkF_7540.auth'.
+Removing: '/tmp/01d74WPrfJj_7540.auth'.
+Removing: '/tmp/01d74P12wLw_7540.auth'.
+Removing: '/tmp/01d74PCYDgU_7540.auth'.
+Removing: '/tmp/01d74xPC4KF_7540.auth'.
+Removing: '/tmp/01d74O4SwFh_7540.auth'.
+Removing: '/tmp/01d74NqSokw_7540.auth'.
+Removing: '/tmp/01d74wDyBLF_7540.auth'.
+Removing: '/tmp/01d745VSJiv_7540.auth'.
+Removing: '/tmp/01d74ThY1SH_7540.auth'.
+Removing: '/tmp/01d74h1s6RE_7540.auth'.
+Removing: '/tmp/01d74y74jdx_7540.auth'.
+Removing: '/tmp/01d74M3hdy6_7540.auth'.
+Removing: '/tmp/01d74qeFB2N_7540.auth'.
+Removing: '/tmp/01d74qtiUUp_7540.auth'.
+Removing: '/tmp/01d742sL89K_7540.auth'.
+Removing: '/tmp/01d74UvYae0_7540.auth'.
+Removing: '/tmp/01d74VQcl9y_7540.auth'.
+Removing: '/tmp/01d74NedwE9_7540.auth'.
+Removing: '/tmp/01d74wN0LGM_7540.auth'.
+Removing: '/tmp/01d74Vg7PKg_7540.auth'.
+Removing: '/tmp/01d749QTEgy_7540.auth'.
+Removing: '/tmp/01d74CcsVoT_7540.auth'.
+Removing: '/tmp/01d74ZjGMXz_7540.auth'.
+Removing: '/tmp/01d74mTO4pu_7540.auth'.
+Removing: '/tmp/01d74Q1EX3x_7540.auth'.
+Removing: '/tmp/01d749N8Lfm_7540.auth'.
+Removing: '/tmp/01d747utW6r_7540.auth'.
+Removing: '/tmp/01d741vAqir_7540.auth'.
+Removing: '/tmp/01d74WO1GKg_7540.auth'.
+Removing: '/tmp/01d74W1HWaT_7540.auth'.
+Removing: '/tmp/01d74va3zje_7540.auth'.
+Removing: '/tmp/01d74U3PB80_7540.auth'.
+Removing: '/tmp/01d74iWsNrg_7540.auth'.
+Removing: '/tmp/01d74XzEN5u_7540.auth'.
+Removing: '/tmp/01d74fwanUO_7540.auth'.
+Removing: '/tmp/01d74rDwkqv_7540.auth'.
+Removing: '/tmp/01d74teCMDu_7540.auth'.
+Generating file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/main_func/for_testing/readme.txt".
+com.mathworks.toolbox.compiler.plugin.DeployableArchivePackageCommand@43ec3cb8
+Elapsed packaging time was: 2 minutes and 4 seconds.

@@ -6,6 +6,7 @@
 ## ignoring target file
 server/
 user-interface/interface/
+python/
 
 ### macOS ###
 # General

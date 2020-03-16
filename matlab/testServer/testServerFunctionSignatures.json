@@ -1,0 +1,30 @@
+// Function Signatures
+// To optionally specify argument types and/or sizes, search for "type"
+// and insert the appropriate specifiers inside the brackets. For example:
+//
+//    "type": ["double", "size=1,1"]
+//
+// To modify function or parameter help text, search for "purpose" and edit
+// the values.
+//
+// JSON-formatted text below this line.
+{
+    "_schemaVersion": "1.1.0",
+    "testServer": {
+        "inputs": [
+            {
+                "name": "input_args",
+                "type": [],
+                "purpose": ""
+            }
+        ],
+        "outputs": [
+            {
+                "name": "output_args",
+                "type": [],
+                "purpose": ""
+            }
+        ],
+        "purpose": " TESTSERVER Summary of this function goes here\n    Detailed explanation goes here\n"
+    }
+}

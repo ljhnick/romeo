@@ -1,0 +1,15 @@
+mcc -W CTF:Test -U -d '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/Test/for_testing' -v '/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/testServer/testServer.m' 
+Compiler version: 6.1 (R2015b)
+
+Dependency analysis by REQUIREMENTS.
+
+[Warning: Adding path "/Users/nickli/Google
+Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/testServer" to
+Compiler path instance.] 
+[] 
+Parsing file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/testServer/testServer.m"
+	(Referenced from: "Compiler Command Line").
+Deleting 0 temporary MEX authorization files.
+Generating file "/Users/nickli/Google Drive/Research/HCI_Lab/Project_Romeo/proj-transiot/matlab/Test/for_testing/readme.txt".
+com.mathworks.toolbox.compiler.plugin.DeployableArchivePackageCommand@549bd015
+Elapsed packaging time was: 35 seconds.
