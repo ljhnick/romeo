@@ -29,7 +29,7 @@ if IFSTRIP == 0
     end
     
     for i = 1:numel(target_points)
-        target_points{i} = target_points{i}-P0;
+%         target_points{i} = target_points{i}-P0;
     end
 
     if type == 1

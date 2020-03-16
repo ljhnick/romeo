@@ -166,22 +166,23 @@ if type == 1
         index4(i) = target_p{i}(1) > 0 && target_p{i}(2) < 0;
     end
     
-    if numel(find(index1)) == 0
-        T_1 = eye(3);
-        POSITION = 1;
-    elseif numel(find(index2)) == 0
-        T_1 = rotz(-90);
-        POSITION = 2;
-    elseif numel(find(index3)) == 0
-        T_1 = rotz(-180);
-        POSITION = 3;
-    elseif numel(find(index4)) == 0
-        T_1 = rotz(90);
-        POSITION = 4;
-    else
-        T_1 = eye(3);
-    end
+%     if numel(find(index1)) == 0
+%         T_1 = eye(3);
+%         POSITION = 1;
+%     elseif numel(find(index2)) == 0
+%         T_1 = rotz(-90);
+%         POSITION = 2;
+%     elseif numel(find(index3)) == 0
+%         T_1 = rotz(-180);
+%         POSITION = 3;
+%     elseif numel(find(index4)) == 0
+%         T_1 = rotz(90);
+%         POSITION = 4;
+%     else
+%         T_1 = eye(3);
+%     end
     
+    T_1 = eye(3);
     T_final = T_1*T;
 
     for i = 1:numel(target_p)

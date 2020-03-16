@@ -164,4 +164,7 @@ saveSTL.style.display = 'none';
 document.body.appendChild( saveSTL );
 
 
+// task type
+var TASKTYPE;
+
 

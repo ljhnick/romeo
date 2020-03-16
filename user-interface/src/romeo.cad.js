@@ -317,24 +317,24 @@ class ObjFixedCAD extends CAD {
 		switch (this._jtType){
 			case 1:
 				secondIndex = 2;
-				var joint2ang = target_q[secondIndex] - q0[secondIndex];
-				this._joint2.rotation.x += joint2ang;
+				var joint2ang = -(target_q[secondIndex] - q0[secondIndex]);
+				this._joint2.rotation.x = joint2ang;
 				break;
 			case 2:
 				secondIndex = 3;
-				var joint2ang = target_q[secondIndex] - q0[secondIndex];
-				this._joint2.rotation.y += joint2ang;
+				var joint2ang = -(target_q[secondIndex] - q0[secondIndex]);
+				this._joint2.rotation.y = joint2ang;
 				break;
 			case 3:
 				secondIndex = 1;
-				var joint2ang = target_q[secondIndex] - q0[secondIndex];
-				this._joint2.rotation.z += joint2ang;
+				var joint2ang = -(target_q[secondIndex] - q0[secondIndex]);
+				this._joint2.rotation.z = joint2ang;
 				break;
 		}
 		
-		this._joint1.rotation.z += joint1ang;
-		this._joint3.rotation.z += joint3ang;
-		this._joint4.rotation.z += joint4ang;
+		this._joint1.rotation.z = joint1ang;
+		this._joint3.rotation.z = joint3ang;
+		this._joint4.rotation.z = joint4ang;
 	}
 
 	_generateParts() {
@@ -393,19 +393,19 @@ class ObjFixedCAD extends CAD {
 				var hole2 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
 				var hole3 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
 				var hole4 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
-				var hole5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+				var hole5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-12, 2.2);
+				var hole6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-12, 2.2);
+				var hole7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-12, 2.2);
+				var hole8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-12, 2.2);
 
 				var stair1 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair2 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair3 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair4 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
-				var stair5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
+				var stair5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-14, 3);
+				var stair6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-14, 3);
+				var stair7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-14, 3);
+				var stair8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-14, 3);
 
 				var hole = booleanGeo(hole1, hole2, UNION);
 				hole = booleanGeo(hole, hole3, UNION);
@@ -439,19 +439,19 @@ class ObjFixedCAD extends CAD {
 				var hole2 = ljhCylinderMeshFromPoint(pvtX, pvtY-6, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
 				var hole3 = ljhCylinderMeshFromPoint(pvtX+18, pvtY+6, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
 				var hole4 = ljhCylinderMeshFromPoint(pvtX+18, pvtY-6, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
-				var hole5 = ljhCylinderMeshFromPoint(pvtX, pvtY, pvtZ+6, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole6 = ljhCylinderMeshFromPoint(pvtX, pvtY, pvtZ-6, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole7 = ljhCylinderMeshFromPoint(pvtX+18, pvtY+6, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole8 = ljhCylinderMeshFromPoint(pvtX+18, pvtY-6, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+				var hole5 = ljhCylinderMeshFromPoint(pvtX, pvtY+6, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-12, 2.2);
+				var hole6 = ljhCylinderMeshFromPoint(pvtX, pvtY-6, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-12, 2.2);
+				var hole7 = ljhCylinderMeshFromPoint(pvtX+18, pvtY+6, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-12, 2.2);
+				var hole8 = ljhCylinderMeshFromPoint(pvtX+18, pvtY-6, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-12, 2.2);
 
 				var stair1 = ljhCylinderMeshFromPoint(pvtX, pvtY+6, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair2 = ljhCylinderMeshFromPoint(pvtX, pvtY-6, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair3 = ljhCylinderMeshFromPoint(pvtX+18, pvtY+6, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair4 = ljhCylinderMeshFromPoint(pvtX+18, pvtY-6, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
-				var stair5 = ljhCylinderMeshFromPoint(pvtX, pvtY+6, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair6 = ljhCylinderMeshFromPoint(pvtX, pvtY-6, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair7 = ljhCylinderMeshFromPoint(pvtX+18, pvtY+6, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair8 = ljhCylinderMeshFromPoint(pvtX+18, pvtY-6, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
+				var stair5 = ljhCylinderMeshFromPoint(pvtX, pvtY+6, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-14, 3);
+				var stair6 = ljhCylinderMeshFromPoint(pvtX, pvtY-6, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-14, 3);
+				var stair7 = ljhCylinderMeshFromPoint(pvtX+18, pvtY+6, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-14, 3);
+				var stair8 = ljhCylinderMeshFromPoint(pvtX+18, pvtY-6, zmin < (pvtZ-14) ? zmin : (pvtZ-14), pvtZ-14, 3);
 				
 				var hole = booleanGeo(hole1, hole2, UNION);
 				hole = booleanGeo(hole, hole3, UNION);
@@ -1114,23 +1114,23 @@ class ObjMovingCAD extends CAD {
 			case 1:
 				firstIndex = 2;
 				var joint1ang = target_q[firstIndex] - q0[firstIndex];
-				this._joint1.rotation.z += joint1ang;
+				this._joint1.rotation.z = joint1ang;
 				break;
 			case 2:
 				firstIndex = 1;
 				var joint1ang = target_q[firstIndex] - q0[firstIndex];
-				this._joint1.rotation.x += joint1ang;
+				this._joint1.rotation.x = joint1ang;
 				break;
 			case 3:
 				firstIndex = 0;
 				var joint1ang = target_q[firstIndex] - q0[firstIndex];
-				this._joint1.rotation.y += joint1ang;
+				this._joint1.rotation.y = joint1ang;
 				break;
 		}
 		
-		this._joint2.rotation.z += joint2ang;
-		this._joint3.rotation.z += joint3ang;
-		this._joint4.rotation.z += joint4ang;
+		this._joint2.rotation.z = joint2ang;
+		this._joint3.rotation.z = joint3ang;
+		this._joint4.rotation.z = joint4ang;
 
 
 	}
@@ -1220,19 +1220,19 @@ class ObjMovingCAD extends CAD {
 				var hole2 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
 				var hole3 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
 				var hole4 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
-				var hole5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-				var hole8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+				var hole5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ+12, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+				var hole6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+12, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+				var hole7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ+12, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+				var hole8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ+12, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
 
 				var stair1 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair2 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair3 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 				var stair4 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
-				var stair5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-				var stair8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
+				var stair5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ-14, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 3);
+				var stair6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ-14, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 3);
+				var stair7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY+18, pvtZ-14, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 3);
+				var stair8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY+18, pvtZ-14, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 3);
 
 				var hole = booleanGeo(hole1, hole2, UNION);
 				hole = booleanGeo(hole, hole3, UNION);
@@ -1830,23 +1830,23 @@ class ObjStripCAD extends CAD {
 			case 1:
 				firstIndex = 2;
 				var joint1ang = target_q[firstIndex] - q0[firstIndex];
-				this._joint1.rotation.z += joint1ang;
+				this._joint1.rotation.z = joint1ang;
 				break;
 			case 2:
 				firstIndex = 1;
 				var joint1ang = target_q[firstIndex] - q0[firstIndex];
-				this._joint1.rotation.x += joint1ang;
+				this._joint1.rotation.x = joint1ang;
 				break;
 			case 3:
 				firstIndex = 0;
 				var joint1ang = target_q[firstIndex] - q0[firstIndex];
-				this._joint1.rotation.y += joint1ang;
+				this._joint1.rotation.y = joint1ang;
 				break;
 		}
 		
-		this._joint2.rotation.z += joint2ang;
-		this._joint3.rotation.z += joint3ang;
-		this._joint4.rotation.z += joint4ang;
+		this._joint2.rotation.z = joint2ang;
+		this._joint3.rotation.z = joint3ang;
+		this._joint4.rotation.z = joint4ang;
 
 
 	}
@@ -1996,19 +1996,19 @@ class ObjStripCAD extends CAD {
 		var hole2 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
 		var hole3 = ljhCylinderMeshFromPoint(pvtX+9, pvtY-18, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
 		var hole4 = ljhCylinderMeshFromPoint(pvtX-9, pvtY-18, pvtZ+12, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 2.2);
-		var hole5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-		var hole6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-		var hole7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY-18, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
-		var hole8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY-18, pvtZ+12, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+		var hole5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ+12, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+		var hole6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+12, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+		var hole7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY-18, pvtZ+12, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
+		var hole8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY-18, pvtZ+12, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 2.2);
 
 		var stair1 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 		var stair2 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 		var stair3 = ljhCylinderMeshFromPoint(pvtX+9, pvtY-18, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
 		var stair4 = ljhCylinderMeshFromPoint(pvtX-9, pvtY-18, pvtZ+14, zmax > (pvtZ+14) ? zmax : (pvtZ+14), 3);
-		var stair5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-		var stair6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-		var stair7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY-18, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
-		var stair8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY-18, pvtZ-14, zmin > (pvtZ-14) ? zmin : (pvtZ-14), 3);
+		var stair5 = ljhCylinderMeshFromPoint(pvtX+9, pvtY, pvtZ-14, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 3);
+		var stair6 = ljhCylinderMeshFromPoint(pvtX-9, pvtY, pvtZ-14, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 3);
+		var stair7 = ljhCylinderMeshFromPoint(pvtX+9, pvtY-18, pvtZ-14, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 3);
+		var stair8 = ljhCylinderMeshFromPoint(pvtX-9, pvtY-18, pvtZ-14, zmin < (pvtZ-14) ? zmin : (pvtZ-14), 3);
 
 		var hole = booleanGeo(hole1, hole2, UNION);
 		hole = booleanGeo(hole, hole3, UNION);
