@@ -125,7 +125,7 @@ class ObjFixedCAD extends CAD {
 		var raycaster = new THREE.Raycaster();
 		raycaster.set(new THREE.Vector3(0,this._bboxParamsNew.leny/2+1,0), new THREE.Vector3(0,-1,0));
 		var intersects = raycaster.intersectObjects([this._meshTransNew]);
-		if (intersects.length > 2) {
+		if (intersects.length == 4) {
 			var holeSizeY = intersects[1].distance - intersects[intersects.length-2].distance;
 		} else {
 			var holeSizeY = 0;
@@ -136,7 +136,7 @@ class ObjFixedCAD extends CAD {
 		var raycaster = new THREE.Raycaster();
 		raycaster.set(new THREE.Vector3(this._bboxParamsNew.lenx/2+1, 0, 0), new THREE.Vector3(-1, 0, 0));
 		var intersects = raycaster.intersectObjects([this._meshTransNew]);
-		if (intersects.length > 2) {
+		if (intersects.length == 4) {
 			var holeSizeX = intersects[1].distance - intersects[intersects.length-2].distance;
 		} else {
 			var holeSizeX = 0;
@@ -159,7 +159,7 @@ class ObjFixedCAD extends CAD {
 		var pivot5 = new THREE.Group();
 		var base = new THREE.Group();
 
-		if ((xmax-holeSizeX/2) < 30 || (ymax-holeSizeY/2) < 30) {
+		if ((xmax-holeSizeX/2) < 30 && (ymax-holeSizeY/2) < 30) {
 			pivot1.position.set(0-16, (ymax+holeSizeY/2)/2, 0);
 			pivot2.position.set((xmin-holeSizeX/2)/2, 0+16, 0);
 			pivot3.position.set(0-16, (ymin-holeSizeY/2)/2, 0);

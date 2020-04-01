@@ -20,7 +20,7 @@ gMouseCtrls.dynamicDampingFactor = 0.3;
 document.addEventListener('mousedown', onMouseDownStep, false);
 document.addEventListener('mousemove', onMouseMoveStep, false);
 document.addEventListener('mouseup', onMouseUpStep, false);
-document.addEventListener('keydown', onKeyDownStep, false);
+// document.addEventListener('keydown', onKeyDownStep, false);
 // document.addEventListener('mousemove', onMouseDownStep, false);
 // document.addEventListener('mouseover', onMouseOverStep, false);
 
@@ -32,6 +32,7 @@ var gSticky = false;
 
 
 function onMouseDownStep(e) {
+	e.stopPropagation();
 	if (e.which != LEFTMOUSE) {
 		return;
 	}
@@ -48,6 +49,7 @@ function onMouseDownStep(e) {
 }
 
 function onMouseMoveStep(e) {
+	e.stopPropagation();
 	if (e.which != LEFTMOUSE) {
 		switch (gStep) {
 			case 1:
@@ -70,6 +72,7 @@ function onMouseMoveStep(e) {
 }
 
 function onMouseUpStep(e) {
+	e.stopPropagation();
 	if (e.which != LEFTMOUSE) {
 		return;
 	}

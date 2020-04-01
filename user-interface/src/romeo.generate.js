@@ -18,16 +18,16 @@ class Workspace {
 		// A new XMLHttpRequest object
     	var request = new XMLHttpRequest();
     	//Use MPS RESTful API to specify URL
-    	var url = "http://localhost:9910/version5_nopos/main_func";
-  	 	// var url = "http://localhost:9910/version5_noncol/main_func";
-  	 	// var url = "http://localhost:9910/test3/testServer";
+    	// var url = "http://localhost:9910/version5_nopos/main_func";
+  	 	var url = "http://localhost:9910/main_function/main_func";
+  	 	// var url = "http://localhost:9910/test/testServer";
 
   	 	request.open("POST", url);
 
   	 	//Use MPS RESTful API to set Content-Type
     	request.setRequestHeader("Content-Type", "application/json");
-    	var params = { "nargout":1,
-                   "rhs": [JSON.stringify(tarPoints._data)] };
+    	var params = {"nargout":1,
+        			  "rhs": [JSON.stringify(tarPoints._data)] };
 
         request.onload = function()
 	    {   //Use MPS RESTful API to check HTTP Status
@@ -111,12 +111,20 @@ class Workspace {
 			// var center = new THREE.Vector3(x+scale/2, y+scale/2, z+scale/2);
 			var center = new THREE.Vector3(x, y, z);
 			// var voxel = new THREE.BoxGeometry(scale, scale, scale);
-			var voxel = new THREE.SphereGeometry(2, 4, 2);
-			var voxMesh = new THREE.Mesh(voxel, MATERIALVOXEL);
-			voxMesh.position.copy(center);
-			this._wsVoxel.push(voxMesh);
-			scene.add(voxMesh);
+			// var voxel = new THREE.SphereGeometry(2, 4, 2);
+			// var voxMesh = new THREE.Mesh(voxel, MATERIALVOXEL);
+			// voxMesh.position.copy(center);
+			// this._wsVoxel.push(voxMesh);
+			this._wsVoxel.push(center);
+			// scene.add(voxMesh);
 		}
+		var singleGeometry = new THREE.ConvexGeometry(this._wsVoxel);
+		// for (var i = 0; i < this._wsVoxel.length; i++) {
+		// 	this._wsVoxel[i].updateMatrix();
+		// 	singleGeometry.merge(this._wsVoxel[i].geometry, this._wsVoxel[i].matrix);
+		// }
+		// singleGeometry.mergeVertices();
+		scene.add(new THREE.Mesh(singleGeometry, MATERIALVOXEL));
 	}
 
 	clear() {

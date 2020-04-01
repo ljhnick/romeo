@@ -61,19 +61,19 @@ function drawGround(yOffset) {
      ground.position.y -= yOffset;
      return ground;
 }
-var gGround = drawGround(0);
-scene.add(gGround);
+// var gGround = drawGround(0);
+// scene.add(gGround);
 
 //
 // draw grid
 //
 function drawGrid(yOffset) {
      var gridHelper = new THREE.GridHelper( 1000, 40);
-     gridHelper.position.y = -yOffset;
+     gridHelper.position.y = yOffset;
      return gridHelper;
 }
-var gGrid = drawGrid(0);
-scene.add(gGrid);
+// var gGrid = drawGrid(0);
+// scene.add(gGrid);
 
 //
 // add lights
@@ -112,11 +112,11 @@ var MATERIALHIGHLIGHT = new THREE.MeshPhongMaterial({
      opacity: 0.75
 });
 
-var MATERIALPLAIN = new THREE.MeshBasicMaterial({
-     vertexColors: THREE.VertexColors,
-     transparent: true,
-     opacity: 1.0
-});
+// var MATERIALPLAIN = new THREE.MeshBasicMaterial({
+//      vertexColors: THREE.VertexColors,
+//      transparent: true,
+//      opacity: 1.0
+// });
 
 var MATERIALINVISIBLE= new THREE.MeshBasicMaterial({
      vertexColors: 0xffffff,
@@ -125,11 +125,11 @@ var MATERIALINVISIBLE= new THREE.MeshBasicMaterial({
      visible: false
 });
 
-var MATERIALFOCUS = new THREE.MeshPhongMaterial({
-     color: COLORSTROKE,
-     transparent: true,
-     opacity: 1.0
-});
+// var MATERIALFOCUS = new THREE.MeshPhongMaterial({
+//      color: COLORSTROKE,
+//      transparent: true,
+//      opacity: 1.0
+// });
 
 var MATERIALGREEN = new THREE.MeshPhongMaterial({
      color: 0x65E604,
@@ -146,8 +146,24 @@ var MATERIALOBSTACLE = new THREE.MeshPhongMaterial({
 var MATERIALVOXEL = new THREE.MeshPhongMaterial({
      color: 0xfff000,
      transparent: true,
+     opacity: 0.5,
+     wireframe: false
+})
+
+var MATERIALPOINT = new THREE.MeshPhongMaterial({
+     color: 0x65E604,
+     transparent: false,
      opacity: 1,
      // wireframe: true
+})
+
+var MATERIALLINE = new THREE.LineBasicMaterial({
+     color: COLORNORMAL
+});
+
+var MATERIALSOLID = new THREE.MeshPhongMaterial({
+     color: COLORNORMAL,
+     transparent: false
 })
 
 

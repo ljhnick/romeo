@@ -20,6 +20,7 @@ class BboxUI {
 	constructor(obj) {
 		this._obj = obj;
 		this._bboxParams = getBoundingBoxEverything(obj);
+		this._bboxInit = getBoundingBoxEverything(obj);
 		this._update(this._bboxParams);
 	}
 
@@ -207,30 +208,62 @@ class AxisBboxUI extends BboxUI {
 		// scene.remove(this._transPt);
 
 		// compute the bounding box of the transformable part
-		var transPartBbox = new THREE.BoxGeometry(this._bboxParams.lenx, this._bboxParams.leny, this._bboxParams.lenz);
-		var position = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
-		var transPt = new THREE.Mesh(transPartBbox, MATERIALNORMAL);
-		transPt.position.copy(position);
-		var geoObj = new THREE.Geometry().fromBufferGeometry(this._obj.geometry);
-		var meshObj = new THREE.Mesh(geoObj, MATERIALNORMAL);
+		// var transPartBbox = new THREE.BoxGeometry(this._bboxParams.lenx, this._bboxParams.leny, this._bboxParams.lenz);
+		// var position = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
+		// var transPt = new THREE.Mesh(transPartBbox, MATERIALNORMAL);
+		// transPt.position.copy(position);
+		// var geoObj = new THREE.Geometry().fromBufferGeometry(this._obj.geometry);
+		// var meshObj = new THREE.Mesh(geoObj, MATERIALNORMAL);
 
-		this._transPt = boolean(meshObj, transPt, INTERSECT);
+		// this._transPt = boolean(meshObj, transPt, INTERSECT);
 
 		// scene.add(this._transPt)
 	}
 
 	endStep() {
-		this.clearAll();
-		this._transPt.material = MATERIALNORMAL;
-		var geoObj = new THREE.Geometry().fromBufferGeometry(this._obj.geometry);
-		var meshObj = new THREE.Mesh(geoObj, MATERIALNORMAL);
 
+		// compute the bounding box first
 		var transPartBbox = new THREE.BoxGeometry(this._bboxParams.lenx, this._bboxParams.leny, this._bboxParams.lenz);
 		var position = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
 		var transPt = new THREE.Mesh(transPartBbox, MATERIALNORMAL);
 		transPt.position.copy(position);
+		var geoObj = new THREE.Geometry().fromBufferGeometry(this._obj.geometry);
+		var meshObj = new THREE.Mesh(geoObj, MATERIALNORMAL);
 
-		this._staticPt = boolean(meshObj, transPt, SUBTRACT);
+		switch(this._axisSel) {
+			case 'x':
+				break;
+			case 'y':
+				var ymax_init = this._bboxInit.cmax.y;
+				var ymin_init = this._bboxInit.cmin.y;
+				var ymax = this._bboxParams.cmax.y;
+				var ymin = this._bboxParams.cmin.y;
+				if (ymax < ymax_init && ymin > ymin_init) {
+					var midPillar = new THREE.CylinderGeometry(20, 20, ymax_init-ymin_init);
+					midPillar.translate(0, this._bboxParams.ctry, 0);
+					transPt = booleanGeo(transPt, midPillar, SUBTRACT);
+				}
+				break;
+			case 'z':
+				break;
+		}
+
+		var transPart = booleanGeo(meshObj, transPt, INTERSECT);
+		this._transPt = new THREE.Mesh(transPart, MATERIALNORMAL);
+
+		// 
+		this.clearAll();
+		// this._transPt.material = MATERIALNORMAL;
+		// var geoObj = new THREE.Geometry().fromBufferGeometry(this._obj.geometry);
+		// var meshObj = new THREE.Mesh(geoObj, MATERIALNORMAL);
+
+		// var transPartBbox = new THREE.BoxGeometry(this._bboxParams.lenx, this._bboxParams.leny, this._bboxParams.lenz);
+		// var position = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
+		// var transPt = new THREE.Mesh(transPartBbox, MATERIALNORMAL);
+		// transPt.position.copy(position);
+
+		this._staticPt = booleanGeo(meshObj, transPart, SUBTRACT);
+		this._staticPt = new THREE.Mesh(this._staticPt);
 		this._staticPt.material = MATERIALOBSTACLE;
 		scene.add(this._transPt);
 		scene.add(this._staticPt);

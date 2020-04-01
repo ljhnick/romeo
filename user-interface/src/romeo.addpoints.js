@@ -27,11 +27,16 @@ class TargetPoints {
 		var center = new THREE.Vector3(ctrx, ctry, ctrz);
 		var nml = new THREE.Vector3(0, 1, 0);
 
-		var basePlane = new ljhRectVolume(1000, 0.1, 1000, MATERIALCONTRAST);
+		var basePlane = new ljhRectVolume(1000, 0.1, 1000, MATERIALINVISIBLE);
 		rotateObjTo(basePlane.m, nml);
 		basePlane.m.position.copy(center);
 		scene.add(basePlane.m);
+
+		var grid = drawGrid(ctry);
+		scene.add(grid);
+
 		this._basePlane = basePlane.m;
+		this._grid = grid;
 	}
 
 	_addVerPlane(point) {
@@ -55,12 +60,14 @@ class TargetPoints {
 class AddPoints extends TargetPoints {
 	constructor(obj, normal) { // obj is the transformable part
 		super(obj, normal);
-		this._points = [];
+		this._points = []; // pos and ori information
+		this._pointsMesh = []; // target points mesh
 		this._cubeDraw = [];
 		this._optionMode = false; // option means choosing task type
 		this._addMode = '2d';
 		this._sphereOriArrow = [];
 		this._objectType = OBJECTTYPE;
+		this._targetPointsLine = [];
 	}
 
 	_addAPoint(point) {
@@ -86,29 +93,51 @@ class AddPoints extends TargetPoints {
 			case '2d':
 				if (this._cubeDraw.length > 0) {
 					scene.remove(this._cubeDraw[0]);
+					scene.remove(this._arrowRef);
 				}
 				var ints = rayCast(e.clientX, e.clientY, [this._basePlane]);
 				if (ints.length > 0) {
 					var point = ints[0].point;
 					var cube = new THREE.SphereGeometry(3,32,32);
-					var cubeM = new THREE.Mesh(cube, MATERIALGREEN);
+					var cubeM = new THREE.Mesh(cube, MATERIALPOINT);
 					var pointGrd = point.clone();
 					pointGrd.y = point.y + 3;
 					cubeM.position.copy(pointGrd);
 					scene.add(cubeM);
 					this._cubeDraw[0] = cubeM;
+
+					// add an arrow reference
+					var center = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
+					var length = point.distanceTo(center);
+					var dir = center.sub(point);
+					var hex = 0x65E604;
+					var arrowRef = new THREE.ArrowHelper(dir, point, length, hex, 20);
+					scene.add(arrowRef);
+					this._arrowRef = arrowRef;
 				}
 				break;
 
 			case '3d':
 				if (this._cubeDraw.length > 0) {
 					scene.remove(this._cubeDraw[0]);
+					scene.remove(this._arrowRef);
 				}
 				var ints = rayCast(e.clientX, e.clientY, [this._verticalPlane]);
 				if (ints.length > 0) {
 					var cubeNew = this._addAPoint(ints[0].point);
 					scene.add(cubeNew);
 					this._cubeDraw[0] = cubeNew;
+
+					// add an arrow reference
+					var origin = cubeNew.position.clone();
+					var center = new THREE.Vector3(this._bboxParams.ctrx, origin.y, this._bboxParams.ctrz);
+					var length = origin.distanceTo(center);
+					var dir = center.sub(origin);
+					var hex = COLORNORMAL;
+					var arrowRef = new THREE.ArrowHelper(dir, origin, length, hex, 20);
+					scene.add(arrowRef);
+					this._arrowRef = arrowRef;
+
 				}
 				break;
 
@@ -145,8 +174,26 @@ class AddPoints extends TargetPoints {
 				var ints = rayCast(e.clientX, e.clientY, [this._basePlane]);
 				if (ints.length > 0) {
 					this._basePlane.visible = false;
+					// this._grid.visible = false;
 					this._addVerPlane(ints[0].point);
 					this._addMode = '3d';
+					// add z axis reference line
+					var p0 = ints[0].point.clone();
+					p0.set(p0.x, -1000, p0.z);
+					var p1 = ints[0].point.clone();
+					var p2 = ints[0].point.clone();
+					p2.set(p2.x, 1000, p2.z);
+					var points = [];
+					points.push(p0);
+					points.push(p1);
+					points.push(p2);
+
+					var geo = new THREE.BufferGeometry().setFromPoints(points);
+					this._line = new THREE.Line(geo, MATERIALLINE);
+					scene.add(this._line);
+
+					scene.remove(this._arrowRef);
+					// console.log(ints[0].point);
 				}
 				break;
 
@@ -154,10 +201,13 @@ class AddPoints extends TargetPoints {
 				var ints = rayCast(e.clientX, e.clientY, [this._verticalPlane]);
 				if (ints.length > 0) {
 					var addAPt = this._addAPoint(ints[0].point);
-					addAPt.material = MATERIALNORMAL;
+					addAPt.material = MATERIALSOLID;
 					scene.add(addAPt);
+					this._pointsMesh.push(addAPt);
+
 					if (this._cubeDraw.length > 0) {
 						scene.remove(this._cubeDraw[0]);
+						scene.remove(this._arrowRef);
 					}
 					this._optionMode = true;
 					this._addMode = 'ori';
@@ -169,6 +219,7 @@ class AddPoints extends TargetPoints {
 
 					this._escape = false;
 					scene.add(this._sphereOri);
+					scene.remove(this._line);
 				}
 				break;
 
@@ -181,6 +232,7 @@ class AddPoints extends TargetPoints {
 				var ori = this._movingOri;
 				var point = {'pos': pos, 'ori': ori};
 				this._points.push(point);
+				this.connectPoints(this._points);
 
 				scene.remove(this._sphereOri);
 				this._sphereOriArrow = [];
@@ -190,6 +242,7 @@ class AddPoints extends TargetPoints {
 			case 'option':
 				this._addMode = '2d';
 				this._basePlane.visible = true;
+				this._grid.visible = true;
 				break;
 
 		}
@@ -198,6 +251,7 @@ class AddPoints extends TargetPoints {
 	}
 
 	mouseup(e) {
+		var _self = this;
 		switch (this._addMode) {
 			case ('option'):
 				var left = e.pageX;
@@ -216,7 +270,7 @@ class AddPoints extends TargetPoints {
 				$('#pickplace').on('click', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-					tarPoints._points[tarPoints._points.length-1].type = PICKPLACE;
+					_self._points[_self._points.length-1].type = PICKPLACE;
 					$('#optionMenu').hide();
 					TASKTYPE = PICKPLACE;
 				});
@@ -268,20 +322,31 @@ class AddPoints extends TargetPoints {
 			}
 	}
 
-	keydown(e) {
-		switch (e.keyCode) {
-				case 27:
-					this._escape = true; //could press escape to abort
-					break;
-			}
+	connectPoints(points) {
+		if (points.length < 2) {
+			return;
+		}
+		var startIndex = points.length - 2;
+		var endIndex = points.length - 1;
+		var lineStart = new THREE.Vector3(points[startIndex].pos.x, points[startIndex].pos.y, points[startIndex].pos.z);
+		var lineEnd = new THREE.Vector3(points[endIndex].pos.x, points[endIndex].pos.y, points[endIndex].pos.z);
+
+		var geometry = new THREE.Geometry();
+		geometry.vertices.push(lineStart, lineEnd);
+		var line = new THREE.Line(geometry, MATERIALLINE);
+		scene.add(line);
+		this._targetPointsLine.push(line);
 	}
 
 	endStep() {
 		this._basePlane.visible = false;
+		this._grid.visible = false;
 		this._addMode = 'end';
 		if (this._cubeDraw.length > 0) {
 			scene.remove(this._cubeDraw[0]);
+			scene.remove(this._arrowRef);
 		}
+		scene.remove(this._line);
 		this.packData();
 
 	}

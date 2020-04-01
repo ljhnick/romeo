@@ -29,8 +29,8 @@ function loadStl(data) {
 	var ctr = getBoundingBoxCenter(object);
 
 	// reposition the ground & grid
-	gGround.position.y -= dims[1] * 0.55;
-	gGrid.position.y -= dims[1] * 0.55;
+	// gGround.position.y -= dims[1] * 0.55;
+	// gGrid.position.y -= dims[1] * 0.55;
 
 	// relocate the camera
 	var r = Math.max(25, getBoundingSphereRadius(object));

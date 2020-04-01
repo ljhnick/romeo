@@ -18,7 +18,7 @@ var OBJECTTYPE;
 // generate workspace
 var genWorkspace;
 
-// animate
+// animate global value
 var animateArm;
 
 var initPanel = function() {
@@ -141,7 +141,7 @@ var initPanel = function() {
 				break;
 		}
 		// animateArm = new ObjFixedCAD(axisBboxUI._transPt, genWorkspace._basePos, genWorkspace._jointType, 0, TRAJFOLLOW, genWorkspace._unfoldPl);
-		animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
+		// animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
 
 	});
 
