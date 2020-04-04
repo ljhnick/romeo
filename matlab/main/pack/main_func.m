@@ -5,14 +5,18 @@ function [ output_data ] = main_func( input )
 % user_input; % load user input from the interface
 
 input_data = jsondecode(input);
-[type, transformable, obstacle, target_points, target_ori, T_final, IFSTRIP, POSITION, center, unfolding] = parseData(input_data);
+result = parseData(input_data);
 
-% extract the values
-% type = input_data.type;
-% obstacle = input_data.obstacle;
-% target_points = input_data.points;
-
-
+type = result.type;
+transformable = result.transformable;
+obstacle = result.obstacle;
+target_points = result.targetPoints;
+target_ori = result.targetOri;
+T_final = result.T_final;
+IFSTRIP = result.IFSTRIP;
+POSITION = result.POSITION;
+center = result.center;
+unfolding = result.unfoldingPl;
 
 
 %% generate the transformable arm
@@ -85,12 +89,23 @@ for i = 1:numel(min_dist)
     for index = 1:7
         q_target{i}(index) = Q{index}(n);
     end
+    
+    nearestPoint{i} = (T_final\(min_dist{i}{2}+center)')';
 %     figure(i);
 %     trans_arm.plot(q_target{i});
 end
 
 
-output_data = struct('workspace', {WS}, 'jointType', I, 'allQ', {Q}, 'targetQ', {q_target}, 'q0', q0, 'basePos', POSITION, 'unfoldingPl', unfolding, 'IFSTRIP', IFSTRIP);
+
+output_data = struct('workspace', {WS}, ...
+                     'jointType', I, ...
+                     'allQ', {Q}, ...
+                     'targetQ', {q_target}, ...
+                     'q0', q0, ...
+                     'basePos', POSITION, ...
+                     'unfoldingPl', unfolding, ...
+                     'IFSTRIP', IFSTRIP, ...
+                     'nearestPoint', {nearestPoint});
 
 end
 

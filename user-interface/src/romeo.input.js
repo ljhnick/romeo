@@ -20,6 +20,7 @@ gMouseCtrls.dynamicDampingFactor = 0.3;
 document.addEventListener('mousedown', onMouseDownStep, false);
 document.addEventListener('mousemove', onMouseMoveStep, false);
 document.addEventListener('mouseup', onMouseUpStep, false);
+document.addEventListener('dblclick', onDoubleClick, false);
 // document.addEventListener('keydown', onKeyDownStep, false);
 // document.addEventListener('mousemove', onMouseDownStep, false);
 // document.addEventListener('mouseover', onMouseOverStep, false);
@@ -97,3 +98,11 @@ function onKeyDownStep(e) {
 			break;
 	}
 }	
+
+function onDoubleClick(e) {
+	switch (gStep) {
+		case 3:
+			tarPoints.doubleClick(e);
+			break;
+	}
+}

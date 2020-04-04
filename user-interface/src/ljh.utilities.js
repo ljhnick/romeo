@@ -22,31 +22,40 @@ function rayCast(x, y, objs) {
 function loadStl(data) {
 	var stlLoader = new THREE.STLLoader();
 	var geometry = stlLoader.parse(data);
-	var object = new THREE.Mesh(geometry, MATERIALNORMAL);
-	scene.add(object);
+	if (objects.length == 0) {
+		var object = new THREE.Mesh(geometry, MATERIALNORMAL);
+		scene.add(object);
 
-	var dims = getBoundingBoxDimensions(object);
-	var ctr = getBoundingBoxCenter(object);
+		var dims = getBoundingBoxDimensions(object);
+		var ctr = getBoundingBoxCenter(object);
+
+		var r = Math.max(25, getBoundingSphereRadius(object));
+		camera.position.copy(gPosCam.clone().normalize().multiplyScalar(r * 2));
+
+		// re-lookAt for the camera
+		gMouseCtrls.target = new THREE.Vector3(0, 0, 0);
+
+		// store the object
+		objects.push(object);
+
+		var loader = new THREE.STLLoader();
+		loader.load( 'stl/motor.stl', function ( geometry ) {
+		    var mesh = new THREE.Mesh( geometry, MATERIALOBSTACLE );
+		    MOTOR = mesh;
+		});	
+	} else {
+			var object = new THREE.Mesh(geometry, MATERIALCONTRAST);
+			scene.add(object);
+			objects.push(object);
+	}
+	
 
 	// reposition the ground & grid
 	// gGround.position.y -= dims[1] * 0.55;
 	// gGrid.position.y -= dims[1] * 0.55;
 
 	// relocate the camera
-	var r = Math.max(25, getBoundingSphereRadius(object));
-	camera.position.copy(gPosCam.clone().normalize().multiplyScalar(r * 2));
-
-	// re-lookAt for the camera
-	gMouseCtrls.target = new THREE.Vector3(0, 0, 0);
-
-	// store the object
-	objects.push(object);
-
-	var loader = new THREE.STLLoader();
-	loader.load( 'stl/motor.stl', function ( geometry ) {
-	    var mesh = new THREE.Mesh( geometry, MATERIALOBSTACLE );
-	    MOTOR = mesh;
-	});	
+	
 
 }
 

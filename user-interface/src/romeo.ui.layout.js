@@ -59,8 +59,12 @@ container.append(genArmDiv);
 // animation
 var animateDiv = $('<div class="animate"></div>');
 var animateBtn = $('<button id="animate">Animate</button>');
+var animateBtn1 = $('<button id="animate">Start!</button>');
 animateBtn.css('background-color', 'rgba(192, 192, 192, 0.5)');
+animateBtn1.css('background-color', 'rgba(192, 192, 192, 0.5)');
 animateDiv.append(animateBtn);
+animateDiv.append(animateBtn1);
+
 
 container.append(animateDiv);
 

@@ -68,6 +68,9 @@ class AddPoints extends TargetPoints {
 		this._sphereOriArrow = [];
 		this._objectType = OBJECTTYPE;
 		this._targetPointsLine = [];
+		this._targetPointsLineCone = [];
+		this.pointIndex = 0;
+		this.preventDuplicate = 1;
 	}
 
 	_addAPoint(point) {
@@ -110,6 +113,7 @@ class AddPoints extends TargetPoints {
 					var center = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
 					var length = point.distanceTo(center);
 					var dir = center.sub(point);
+					dir.normalize();
 					var hex = 0x65E604;
 					var arrowRef = new THREE.ArrowHelper(dir, point, length, hex, 20);
 					scene.add(arrowRef);
@@ -165,6 +169,23 @@ class AddPoints extends TargetPoints {
 			case 'option':
 				break;
 
+			case 'attach':
+				// scene.remove(this._attachSurface);
+				var ints = rayCast(e.clientX, e.clientY, [this._attachOri]);
+				if (ints.length > 0) {
+					var fstPoint = ints[0].point;
+					var center = this._attachOri.position;
+					var vec = fstPoint.sub(center);
+					vec.normalize();
+
+					var _axis = new THREE.Vector3;
+					_axis.set(vec.z, 0, - vec.x).normalize();
+					var radians = Math.acos(vec.y);
+
+					this._attachSurface.quaternion.setFromAxisAngle(_axis, radians);
+				}
+				break;
+
 		}
 	}
 
@@ -202,6 +223,9 @@ class AddPoints extends TargetPoints {
 				if (ints.length > 0) {
 					var addAPt = this._addAPoint(ints[0].point);
 					addAPt.material = MATERIALSOLID;
+					addAPt.index = this.pointIndex;
+					this.pointIndex ++;
+
 					scene.add(addAPt);
 					this._pointsMesh.push(addAPt);
 
@@ -232,7 +256,7 @@ class AddPoints extends TargetPoints {
 				var ori = this._movingOri;
 				var point = {'pos': pos, 'ori': ori};
 				this._points.push(point);
-				this.connectPoints(this._points);
+				this.connectPoints();
 
 				scene.remove(this._sphereOri);
 				this._sphereOriArrow = [];
@@ -240,9 +264,14 @@ class AddPoints extends TargetPoints {
 				break;
 
 			case 'option':
-				this._addMode = '2d';
 				this._basePlane.visible = true;
 				this._grid.visible = true;
+				break;
+
+			case 'attach':
+				this._addMode = '2d';
+				scene.remove(this._attachOri);
+				this.preventDuplicate = 1;
 				break;
 
 		}
@@ -273,6 +302,7 @@ class AddPoints extends TargetPoints {
 					_self._points[_self._points.length-1].type = PICKPLACE;
 					$('#optionMenu').hide();
 					TASKTYPE = PICKPLACE;
+					_self._addMode = '2d';
 				});
 
 				/*
@@ -281,20 +311,42 @@ class AddPoints extends TargetPoints {
 				$('#traj').on('click', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-					tarPoints._points[tarPoints._points.length-1].type = TRAJFOLLOW;
+					_self._points[_self._points.length-1].type = TRAJFOLLOW;
 					$('#optionMenu').hide();
 					TASKTYPE = TRAJFOLLOW;
+					_self._addMode = '2d';
 				});
 
+
+				// for attachment
 				/*
 					attach cylinder
 				*/
 				$('#att-cyl').on('click', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-					tarPoints._points[tarPoints._points.length-1].type = ATTACHMENT;
-					$('#optionMenu').hide();
-					TASKTYPE = ATTACHMENT;
+					if (_self.preventDuplicate) {
+						_self._points[_self._points.length-1].type = ATTACHMENT;
+						$('#optionMenu').hide();
+						TASKTYPE = ATTACHMENT;
+
+						// create surface represent
+						_self._addMode = 'attach';
+						var cylinder = new THREE.CylinderGeometry(10, 10, 100, 32);
+						var cylinderMesh = new THREE.Mesh(cylinder, MATERIALNORMAL);
+						// cylinderMesh.position.copy(_self._points[_self._points.length-1].pos);
+						scene.add(cylinderMesh);
+						cylinderMesh.position.copy(_self._points[_self._points.length-1].pos);
+						_self._attachSurface = cylinderMesh;
+
+						var sphere = new ljhSphere(75, MATERIALCONTRAST, true);
+						sphere.m.position.copy(cylinderMesh.position);
+						sphere.m.material = MATERIALCONTRAST;
+						_self._attachOri = sphere.m;
+						scene.add(_self._attachOri);
+
+						_self.preventDuplicate = 0;
+					}
 				});
 
 				/*
@@ -303,8 +355,26 @@ class AddPoints extends TargetPoints {
 				$('#att-rect').on('click', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-					tarPoints._points[tarPoints._points.length-1].type = ATTACHMENT;
+					_self._points[_self._points.length-1].type = ATTACHMENT;
 					$('#optionMenu').hide();
+					_self._addMode = 'attach';
+
+					if (_self.preventDuplicate) {
+						var prism = new THREE.BoxGeometry(10, 100, 10);
+						var prismMesh = new THREE.Mesh(prism, MATERIALNORMAL);
+						// cylinderMesh.position.copy(_self._points[_self._points.length-1].pos);
+						scene.add(prismMesh);
+						prismMesh.position.copy(_self._points[_self._points.length-1].pos);
+						_self._attachSurface = prismMesh;
+
+						var sphere = new ljhSphere(75, MATERIALCONTRAST, true);
+						sphere.m.position.copy(prismMesh.position);
+						sphere.m.material = MATERIALCONTRAST;
+						_self._attachOri = sphere.m;
+						scene.add(_self._attachOri);
+
+						_self.preventDuplicate = 0;
+					}
 				});
 
 				/*
@@ -313,32 +383,119 @@ class AddPoints extends TargetPoints {
 				$('#att-flat').on('click', function(event) {
 					event.preventDefault();
 					/* Act on the event */
-					tarPoints._points[tarPoints._points.length-1].type = ATTACHMENT;
+					_self._points[_self._points.length-1].type = ATTACHMENT;
 					$('#optionMenu').hide();
+					_self._addMode = 'attach';
+
+					if (_self.preventDuplicate) {
+						var prism = new THREE.BoxGeometry(100, 1, 100);
+						var prismMesh = new THREE.Mesh(prism, MATERIALNORMAL);
+						// cylinderMesh.position.copy(_self._points[_self._points.length-1].pos);
+						scene.add(prismMesh);
+						prismMesh.position.copy(_self._points[_self._points.length-1].pos);
+						_self._attachSurface = prismMesh;
+
+						var sphere = new ljhSphere(75, MATERIALCONTRAST, true);
+						sphere.m.position.copy(prismMesh.position);
+						sphere.m.material = MATERIALCONTRAST;
+						_self._attachOri = sphere.m;
+						scene.add(_self._attachOri);
+
+						_self.preventDuplicate = 0;
+					}
 				});
-
-
-
 			}
 	}
 
-	connectPoints(points) {
-		if (points.length < 2) {
+	doubleClick(e) {
+		var ints = rayCast(e.clientX, e.clientY, this._pointsMesh);
+		if (ints.length > 0) {
+			var index = ints[0].object.index;
+			ints[0].object.position.copy(genWorkspace._snapToPoint[index]);
+			this.connectPoints();
+		}
+	}
+
+	connectPoints() {
+		if (this._points.length < 2) {
 			return;
 		}
-		var startIndex = points.length - 2;
-		var endIndex = points.length - 1;
-		var lineStart = new THREE.Vector3(points[startIndex].pos.x, points[startIndex].pos.y, points[startIndex].pos.z);
-		var lineEnd = new THREE.Vector3(points[endIndex].pos.x, points[endIndex].pos.y, points[endIndex].pos.z);
 
-		var geometry = new THREE.Geometry();
-		geometry.vertices.push(lineStart, lineEnd);
-		var line = new THREE.Line(geometry, MATERIALLINE);
-		scene.add(line);
-		this._targetPointsLine.push(line);
+		for (var i = 0; i < this._targetPointsLine.length; i++) {
+			scene.remove(this._targetPointsLine[i]);
+			scene.remove(this._targetPointsLineCone[i]);
+		}
+
+		this._targetPointsLine = [];
+		this._targetPointsLineCone = [];
+
+		this.checkLoop();
+
+		for (var i = 1; i < this._points.length; i++) {
+			var startIndex = i-1;
+			var endIndex = i;
+			var lineStart = this._pointsMesh[startIndex].position;
+			var lineEnd = this._pointsMesh[endIndex].position;
+
+			var geometry = new THREE.Geometry();
+			geometry.vertices.push(lineStart, lineEnd);
+			var line = new THREE.Line(geometry, MATERIALLINE);
+
+			// add reference cone
+			var center = lineStart.clone().add(lineEnd);
+			center.divideScalar(2);
+
+			var dir = lineEnd.clone().sub(lineStart);
+			dir.normalize();
+
+			var _axis = new THREE.Vector3;
+			_axis.set(dir.z, 0, - dir.x).normalize();
+			var radians = Math.acos(dir.y);
+
+			var coneGeo = new THREE.ConeGeometry(2, 10, 32);
+			var cone = new THREE.Mesh(coneGeo, MATERIALNORMAL);
+			cone.quaternion.setFromAxisAngle(_axis, radians);
+			cone.position.copy(center);
+
+			scene.add(line);
+			scene.add(cone);			
+
+			this._targetPointsLine.push(line);
+			this._targetPointsLineCone.push(cone);
+		}
+
+		if (this._isloop) {
+			var lineStart = this._pointsMesh[this._points.length-1].position;
+			var lineEnd = this._pointsMesh[0].position;
+			var geometry = new THREE.Geometry();
+			geometry.vertices.push(lineStart, lineEnd);
+			var line = new THREE.Line(geometry, MATERIALLINE);
+			scene.add(line);
+
+			// add reference cone
+			var center = lineStart.clone().add(lineEnd);
+			center.divideScalar(2);
+
+			var dir = lineEnd.clone().sub(lineStart);
+			dir.normalize();
+
+			var _axis = new THREE.Vector3;
+			_axis.set(dir.z, 0, - dir.x).normalize();
+			var radians = Math.acos(dir.y);
+
+			var coneGeo = new THREE.ConeGeometry(2, 10, 32);
+			var cone = new THREE.Mesh(coneGeo, MATERIALNORMAL);
+			cone.quaternion.setFromAxisAngle(_axis, radians);
+			cone.position.copy(center);
+			scene.add(cone);
+
+			this._targetPointsLine.push(line);
+			this._targetPointsLineCone.push(cone);
+		}
 	}
 
 	endStep() {
+		// this.checkLoop();
 		this._basePlane.visible = false;
 		this._grid.visible = false;
 		this._addMode = 'end';
@@ -349,6 +506,15 @@ class AddPoints extends TargetPoints {
 		scene.remove(this._line);
 		this.packData();
 
+	}
+
+	checkLoop() {
+		var dist = this._points[0].pos.distanceTo(this._points[this._points.length-1].pos);
+		if (dist <= 20) {
+			this._isloop = true;
+		} else {
+			this._isloop = false;
+		}
 	}
 
 	packData() {

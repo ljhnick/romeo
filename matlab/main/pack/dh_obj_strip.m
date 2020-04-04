@@ -1,3 +1,4 @@
+
 function [DH, q0, q] = dh_obj_strip( length, width )
 %DH 此处显示有关此函数的摘要
 %   此处显示详细说明
@@ -18,7 +19,7 @@ DH(3) = Link([0 0 0 pi/2 0], 'modified');
 DH(4) = Link([0 0 seg 0 0], 'modified');
 DH(5) = Link([0 0 seg 0 0], 'modified');
 DH(6) = Link([0 0 seg 0 0], 'modified');
-DH(7) = Link([0 0 seg 0 0], 'modified');
+DH(7) = Link([0 0 seg+90 0 0], 'modified');
 
 % DH.display
 % Arm = SerialLink(DH);

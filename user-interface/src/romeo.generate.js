@@ -19,7 +19,7 @@ class Workspace {
     	var request = new XMLHttpRequest();
     	//Use MPS RESTful API to specify URL
     	// var url = "http://localhost:9910/version5_nopos/main_func";
-  	 	var url = "http://localhost:9910/main_function/main_func";
+  	 	var url = "http://localhost:9910/main_function_v3/main_func";
   	 	// var url = "http://localhost:9910/test/testServer";
 
   	 	request.open("POST", url);
@@ -59,6 +59,7 @@ class Workspace {
 		var basePos = allData.basePos[0].mwdata[0];
 		var unfoldPl = allData.unfoldingPl[0].mwdata[0];
 		var IFSTRIP = allData.IFSTRIP[0].mwdata[0];
+		var nearestPoint = allData.nearestPoint[0].mwdata;
 
 		var allQArray = [];
 		for (var i = 0; i < 7; i++) {
@@ -87,13 +88,20 @@ class Workspace {
 		this._unfoldPl = unfoldPl;
 		this._IFSTRIP = IFSTRIP;
 
+		var snapToPoints = [];
+		for (var i = 0; i < nearestPoint.length; i++) {
+			var p = nearestPoint[i].mwdata
+			snapToPoints.push(new THREE.Vector3(p[0], p[1], p[2]));
+		}
+		this._snapToPoint = snapToPoints;
+
 	}
 
 	_generateWorkspace(ws) {
 		var x = ws.x;
 		var y = ws.y;
 		var z = ws.z;
-		var scale = 15;
+		var scale = 1;
 		x = roundArray(x, scale);
 		y = roundArray(y, scale);
 		z = roundArray(z, scale);
@@ -124,13 +132,15 @@ class Workspace {
 		// 	singleGeometry.merge(this._wsVoxel[i].geometry, this._wsVoxel[i].matrix);
 		// }
 		// singleGeometry.mergeVertices();
-		scene.add(new THREE.Mesh(singleGeometry, MATERIALVOXEL));
+		this._workspaceHull = new THREE.Mesh(singleGeometry, MATERIALVOXEL);
+		scene.add(this._workspaceHull);
 	}
 
 	clear() {
-		for (var i = 0; i < this._wsVoxel.length; i++) {
-			scene.remove(this._wsVoxel[i]);
-		}
+		// for (var i = 0; i < this._wsVoxel.length; i++) {
+		// 	scene.remove(this._wsVoxel[i]);
+		// }
+		scene.remove(this._workspaceHull);
 
 	}
 

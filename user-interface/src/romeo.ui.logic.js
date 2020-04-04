@@ -142,7 +142,15 @@ var initPanel = function() {
 		}
 		// animateArm = new ObjFixedCAD(axisBboxUI._transPt, genWorkspace._basePos, genWorkspace._jointType, 0, TRAJFOLLOW, genWorkspace._unfoldPl);
 		// animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
+		// animateFlag = 1;
 
+	});
+
+	animateBtn1.on('click', function(event) {
+		event.preventDefault();
+		/* Act on the event */
+
+		animateFlag = 1;
 	});
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

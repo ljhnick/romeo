@@ -20,7 +20,7 @@ DH(3) = Link([0 0 0 pi/2 0], 'modified');
 DH(4) = Link([0 0 b2 0 0], 'modified');
 DH(5) = Link([0 0 sqrt((a2/2)^2+b1^2)  0 0], 'modified');
 DH(6) = Link([0 0 sqrt((a1/2)^2+b1^2) 0 0], 'modified');
-DH(7) = Link([0 0 b2 0 0], 'modified');
+DH(7) = Link([0 0 b2+30 0 0], 'modified');
 
 % DH.display
 % Arm = SerialLink(DH);
