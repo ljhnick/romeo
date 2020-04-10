@@ -12,7 +12,15 @@ function rayCast(x, y, objs) {
 	// controlPanel.log(vector);
 	// vector.unproject( camera );
 	rayCaster.ray.set(camera.position, vector.sub(camera.position).normalize());
-	return rayCaster.intersectObjects(objs);
+
+	// var mouse = new THREE.Vector2();
+	// mouse.x = (x / window.innerWidth) * 2 - 1;
+	// mouse.y = -(y / window.innerHeight) * 2 + 1;
+	// rayCaster.setFromCamera(mouse, camera);
+	var ints = rayCaster.intersectObjects(objs);
+
+	return ints;
+	// return rayCaster.intersectObjects(objs);
 }
 
 
@@ -108,6 +116,11 @@ function highlightAxis(x, y, axis) {
 	var intsX = rayCast(x, y, axis[0].children);
 	var intsY = rayCast(x, y, axis[1].children);
 	var intsZ = rayCast(x, y, axis[2].children);
+
+	for (var i = 0; i < axis.length; i++) {
+		axis[i].line.material.opacity = 0.4;
+		axis[i].cone.material.opacity = 0.4;
+	}
 	
 	var axisSel = '';
 	if (intsX.length > 0) {
@@ -121,18 +134,29 @@ function highlightAxis(x, y, axis) {
 	}
 
 	if (axisSel == 'x') {
-		axisBboxUI._axis[1].visible = false;
-		axisBboxUI._axis[2].visible = false;
+		// axisBboxUI._axis[1].visible = false;
+		// axisBboxUI._axis[2].visible = false;
+		axisBboxUI._axis[1].line.material.transparent = true;
+		axisBboxUI._axis[1].cone.material.transparent = true;
+		axisBboxUI._axis[2].line.material.transparent = true;
+		axisBboxUI._axis[2].cone.material.transparent = true;		
 	} else if (axisSel == 'y') {
-		axisBboxUI._axis[0].visible = false;
-		axisBboxUI._axis[2].visible = false;
+		axisBboxUI._axis[0].line.material.transparent = true;
+		axisBboxUI._axis[0].cone.material.transparent = true;
+		axisBboxUI._axis[2].line.material.transparent = true;
+		axisBboxUI._axis[2].cone.material.transparent = true;
 	} else if (axisSel == 'z') {
-		axisBboxUI._axis[0].visible = false;
-		axisBboxUI._axis[1].visible = false;
+		axisBboxUI._axis[1].line.material.transparent = true;
+		axisBboxUI._axis[1].cone.material.transparent = true;
+		axisBboxUI._axis[0].line.material.transparent = true;
+		axisBboxUI._axis[0].cone.material.transparent = true;
 	} else {
-		axisBboxUI._axis[0].visible = true;
-		axisBboxUI._axis[1].visible = true;
-		axisBboxUI._axis[2].visible = true;
+		axisBboxUI._axis[0].line.material.transparent = false;
+		axisBboxUI._axis[0].cone.material.transparent = false;
+		axisBboxUI._axis[1].line.material.transparent = false;
+		axisBboxUI._axis[1].cone.material.transparent = false;
+		axisBboxUI._axis[2].line.material.transparent = false;
+		axisBboxUI._axis[2].cone.material.transparent = false;
 	}
 
 	return axisSel;

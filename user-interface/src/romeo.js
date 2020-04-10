@@ -15,24 +15,18 @@ renderer.setClearColor( BACKGROUNDCOLOR );
 // global value for animation
 var animateFlag = 0;
 var animateIndex = 0;
+var waitIndex = 0;
+var waitSec = 2;
 
 var render = function () {
 	requestAnimationFrame( render );
 	gMouseCtrls.update();
 	// stats.update(); 
 
-	// below is for the tranformation animation
-	if (animateFlag == 1) {
-		var qLength = animateArm._animation(animateIndex);
-		if (animateIndex == qLength-1) {
-			animateIndex = 0;
-		} else {
-			animateIndex ++;
-		}
-	}
+	renderScene();
 
-	lights[0].position.copy(camera.position);
-	renderer.render(scene, camera);
+	// lights[0].position.copy(camera.position);
+	// renderer.render(scene, camera);
 };
 
 function interpQ(q1, q0, inv) {

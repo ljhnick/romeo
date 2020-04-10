@@ -98,7 +98,7 @@ class AddPoints extends TargetPoints {
 					scene.remove(this._cubeDraw[0]);
 					scene.remove(this._arrowRef);
 				}
-				var ints = rayCast(e.clientX, e.clientY, [this._basePlane]);
+				var ints = rayCast(e.clientX/0.8, e.clientY, [this._basePlane]);
 				if (ints.length > 0) {
 					var point = ints[0].point;
 					var cube = new THREE.SphereGeometry(3,32,32);
@@ -126,7 +126,7 @@ class AddPoints extends TargetPoints {
 					scene.remove(this._cubeDraw[0]);
 					scene.remove(this._arrowRef);
 				}
-				var ints = rayCast(e.clientX, e.clientY, [this._verticalPlane]);
+				var ints = rayCast(e.clientX/0.8, e.clientY, [this._verticalPlane]);
 				if (ints.length > 0) {
 					var cubeNew = this._addAPoint(ints[0].point);
 					scene.add(cubeNew);
@@ -151,7 +151,7 @@ class AddPoints extends TargetPoints {
 					break;
 				}
 				scene.remove(this._sphereOriArrow[0]);
-				var ints = rayCast(e.clientX, e.clientY, [this._sphereOri]);
+				var ints = rayCast(e.clientX/0.8, e.clientY, [this._sphereOri]);
 				if (ints.length > 0) {
 					var fstPoint = ints[0].point;
 					var center = this._sphereOri.position;
@@ -171,7 +171,7 @@ class AddPoints extends TargetPoints {
 
 			case 'attach':
 				// scene.remove(this._attachSurface);
-				var ints = rayCast(e.clientX, e.clientY, [this._attachOri]);
+				var ints = rayCast(e.clientX/0.8, e.clientY, [this._attachOri]);
 				if (ints.length > 0) {
 					var fstPoint = ints[0].point;
 					var center = this._attachOri.position;
@@ -192,7 +192,7 @@ class AddPoints extends TargetPoints {
 	mousedown(e) {
 		switch (this._addMode) {
 			case '2d':
-				var ints = rayCast(e.clientX, e.clientY, [this._basePlane]);
+				var ints = rayCast(e.clientX/0.8, e.clientY, [this._basePlane]);
 				if (ints.length > 0) {
 					this._basePlane.visible = false;
 					// this._grid.visible = false;
@@ -219,7 +219,7 @@ class AddPoints extends TargetPoints {
 				break;
 
 			case '3d':
-				var ints = rayCast(e.clientX, e.clientY, [this._verticalPlane]);
+				var ints = rayCast(e.clientX/0.8, e.clientY, [this._verticalPlane]);
 				if (ints.length > 0) {
 					var addAPt = this._addAPoint(ints[0].point);
 					addAPt.material = MATERIALSOLID;

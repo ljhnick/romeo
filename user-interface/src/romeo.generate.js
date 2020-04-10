@@ -19,7 +19,7 @@ class Workspace {
     	var request = new XMLHttpRequest();
     	//Use MPS RESTful API to specify URL
     	// var url = "http://localhost:9910/version5_nopos/main_func";
-  	 	var url = "http://localhost:9910/main_function_v3/main_func";
+  	 	var url = "http://localhost:9910/main_function_v5/main_func";
   	 	// var url = "http://localhost:9910/test/testServer";
 
   	 	request.open("POST", url);

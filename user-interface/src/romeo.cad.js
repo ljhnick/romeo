@@ -102,7 +102,7 @@ class CAD {
 
 		for (var i = 0; i < tarQ.length; i++) {
 			if (i == 0) {
-				if (!this._isloop) {
+				if (!this._isloop && (OBJECTTYPE == OBJFIX || genWorkspace._IFSTRIP == 1)) {
 					q = interpQ(tarQ[0], q0, time_int);
 				}
 				continue;
@@ -407,10 +407,10 @@ class ObjFixedCAD extends CAD {
 		this._link3STL = this._linkJoint3(this._link3, this._pivot4, this._pivot3);
 		this._link4STL = this._linkJoint4(this._link4, this._pivot5, this._pivot4, this._taskType);
 
-		scene.add(this._link1STL);
-		scene.add(this._link2STL);
-		scene.add(this._link3STL);
-		scene.add(this._link4STL);
+		// scene.add(this._link1STL);
+		// scene.add(this._link2STL);
+		// scene.add(this._link3STL);
+		// scene.add(this._link4STL);
 	}
 
 	_linkJoint1(link, pivot, pivot_prev, jtType) {
@@ -1212,10 +1212,10 @@ class ObjMovingCAD extends CAD {
 		this._link3STL = this._linkJoint3(this._link3, this._pivot3, this._pivot4);
 		this._link4STL = this._linkJoint4(this._link4, this._pivot4);
 
-		scene.add(this._link1STL);
-		scene.add(this._link2STL);
-		scene.add(this._link3STL);
-		scene.add(this._link4STL);
+		// scene.add(this._link1STL);
+		// scene.add(this._link2STL);
+		// scene.add(this._link3STL);
+		// scene.add(this._link4STL);
 	}
 
 	_linkJoint1(link, pivot, pivot_next, jtType) {
@@ -2007,10 +2007,10 @@ class ObjStripCAD extends CAD {
 		this._link3STL = this._linkJointZ(this._link3, this._pivot3, this._pivot4);
 		this._link4STL = this._linkJointZ(this._link4, this._pivot4);
 
-		scene.add(this._link1STL);
-		scene.add(this._link2STL);
-		scene.add(this._link3STL);
-		scene.add(this._link4STL);
+		// scene.add(this._link1STL);
+		// scene.add(this._link2STL);
+		// scene.add(this._link3STL);
+		// scene.add(this._link4STL);
 	}
 
 	_linkJointX(link, pivot, pivot_next) {

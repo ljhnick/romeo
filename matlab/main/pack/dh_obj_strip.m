@@ -10,7 +10,7 @@ function [DH, q0, q] = dh_obj_strip( length, width )
 len = max(length, width);
 seg = len/4;
 
-interval = 0.45;
+interval = 0.4;
 
 % generate dh parameters
 DH(1) = Link([0 0 0 0 0], 'modified');
@@ -19,7 +19,7 @@ DH(3) = Link([0 0 0 pi/2 0], 'modified');
 DH(4) = Link([0 0 seg 0 0], 'modified');
 DH(5) = Link([0 0 seg 0 0], 'modified');
 DH(6) = Link([0 0 seg 0 0], 'modified');
-DH(7) = Link([0 0 seg+90 0 0], 'modified');
+DH(7) = Link([0 0 seg+75 0 0], 'modified');
 
 % DH.display
 % Arm = SerialLink(DH);
@@ -49,6 +49,14 @@ q4 = (-pi/2:interval:pi/2)+q0(4);
 q5 = (-pi/2:interval:pi/2)+q0(5);
 q6 = (-pi/2:interval:pi/2)+q0(6);
 q7 = 0+q0(7);
+
+q1(end+1) = pi/2+q0(1);
+q2(end+1) = pi/2+q0(2);
+q3(end+1) = pi/2+q0(3);
+q4(end+1) = pi/2+q0(4);
+q5(end+1) = pi/2+q0(5);
+q6(end+1) = pi/2+q0(6);
+
 
 q = {q1, q2, q3, q4, q5, q6, q7};
 
