@@ -2,14 +2,6 @@
  * user interface layout
  *
  * @author Jiahao Li
- *
- * CHANGES
- *  - ADDED A BUTTON THAT STARTS THE POINT SELECTION
- *  - NEED TO MAKE OBJECT FIXED/OBJECT MOVING TOGGLE-ABLE
- *  - I edited the logic code such that the moving/fix buttons are hooked up, but am not sure how we break up "generateArm" and "animate" buttons futher.
- *
- * TODO: CHECK THAT THE BUTTONS ARE HOOKED UP TO THE CORRECT ACTION
- *
  */
 
 var container = $('<div class="container"></div>');
