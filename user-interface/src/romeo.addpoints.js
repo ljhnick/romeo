@@ -84,7 +84,7 @@ class AddPoints extends TargetPoints {
 		var posNew = oriPt.add(vecOff);
 
 		var cube = new THREE.SphereGeometry(3, 32, 32);
-		var cubeMesh = new THREE.Mesh(cube, MATERIALGREEN);
+		var cubeMesh = new THREE.Mesh(cube, MATERIALNORMAL);
 		cubeMesh.position.copy(posNew);
 		var cubeAtPoint = cubeMesh;
 
@@ -114,7 +114,8 @@ class AddPoints extends TargetPoints {
 					var length = point.distanceTo(center);
 					var dir = center.sub(point);
 					dir.normalize();
-					var hex = 0x65E604;
+					// var hex = 0x65E604;
+					var hex = 0xDB5B8A;
 					var arrowRef = new THREE.ArrowHelper(dir, point, length, hex, 20);
 					scene.add(arrowRef);
 					this._arrowRef = arrowRef;
@@ -439,7 +440,23 @@ class AddPoints extends TargetPoints {
 
 			var geometry = new THREE.Geometry();
 			geometry.vertices.push(lineStart, lineEnd);
-			var line = new THREE.Line(geometry, MATERIALLINE);
+
+			// var line = new THREE.Line(geometry, new THREE.LineMaterial({color: 0xffffff, linewidth: 5}));
+			// var line = new THREE.Line(geometry, MATERIALLINE);
+
+			var lineMesh = new MeshLine();
+			lineMesh.setGeometry(geometry);
+
+			var mat = new MeshLineMaterial({color: COLORNORMAL, lineWidth: 2});
+			// mat.color = COLORNORMAL;
+			// mat.lineWidth = 5;
+
+			var line = new THREE.Mesh(lineMesh.geometry, mat);
+			scene.add(line);
+			// var lineGeo = new THREE.LineGeometry();
+			// lineGeo.setPositions([lineStart, lineEnd]);
+
+			// var line = new 
 
 			// add reference cone
 			var center = lineStart.clone().add(lineEnd);
@@ -452,7 +469,7 @@ class AddPoints extends TargetPoints {
 			_axis.set(dir.z, 0, - dir.x).normalize();
 			var radians = Math.acos(dir.y);
 
-			var coneGeo = new THREE.ConeGeometry(2, 10, 32);
+			var coneGeo = new THREE.ConeGeometry(3, 15, 32);
 			var cone = new THREE.Mesh(coneGeo, MATERIALNORMAL);
 			cone.quaternion.setFromAxisAngle(_axis, radians);
 			cone.position.copy(center);

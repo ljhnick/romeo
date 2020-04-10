@@ -158,7 +158,8 @@ var MATERIALVOXEL = new THREE.MeshPhongMaterial({
 })
 
 var MATERIALPOINT = new THREE.MeshPhongMaterial({
-     color: 0x65E604,
+     // color: 0x65E604,
+     color: COLORNORMAL,
      transparent: false,
      opacity: 1,
      // wireframe: true
