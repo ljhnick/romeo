@@ -8,7 +8,7 @@ server/
 user-interface/interface/
 python/
 mpsserver/
-User-interface/stl/
+user-interface/stl/
 
 ### macOS ###
 # General
