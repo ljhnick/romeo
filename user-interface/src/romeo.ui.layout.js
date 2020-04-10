@@ -2,6 +2,14 @@
  * user interface layout
  *
  * @author Jiahao Li
+ *
+ * CHANGES
+ *  - ADDED A BUTTON THAT STARTS THE POINT SELECTION
+ *  - NEED TO MAKE OBJECT FIXED/OBJECT MOVING TOGGLE-ABLE
+ *  - I edited the logic code such that the moving/fix buttons are hooked up, but am not sure how we break up "generateArm" and "animate" buttons futher.
+ *
+ * TODO: CHECK THAT THE BUTTONS ARE HOOKED UP TO THE CORRECT ACTION
+ *
  */
 
 var container = $('<div class="container"></div>');
@@ -68,18 +76,42 @@ buttonContainer.append(selTransPtDiv);
 // second button:
 // specify spatial point
 var specPtDiv = $('<div class="specPt"></div>');
-var specPtBtn = $('<button id="specPt">Specify Point (object fixed)</button>');
-var specPtBtn1 = $(
-  '<button id="specPt">Specify Point (object moving)</button>'
+var specPtBtn = $(
+  '<button id="specPt"><img src = "./buttons/point.svg"/></button>'
 );
-specPtBtn.css("background-color", "rgba(192, 192, 192, 0.5)");
-specPtBtn1.css("background-color", "rgba(192, 192, 192, 0.5)");
+var objFixBtn = $(
+  '<button id="specPt"><img src = "./buttons/objFixed.svg"/></button>'
+);
+var objMoveBtn = $(
+  '<button id="specPt"><img src = "./buttons/objMoving.svg"/></button>'
+);
+specPtBtn.css("border-style", "hidden");
+specPtBtn.css("background-color", "#D9D9D9");
+objMoveBtn.css("border-style", "hidden");
+objMoveBtn.css("background-color", "#D9D9D9");
+objFixBtn.css("border-style", "hidden");
+objFixBtn.css("background-color", "#D9D9D9");
+
 specPtDiv.append(specPtBtn);
-specPtDiv.append(specPtBtn1);
+specPtDiv.append(objFixBtn);
+specPtDiv.append(objMoveBtn);
 
 buttonContainer.append(specPtDiv);
 
 // third button:
+// generate workspace
+var genSpaceDiv = $('<div class="genSpace"></div>');
+var genSpaceBtn = $(
+  '<button id="genSpace"><img src="./buttons/generate.svg"/></button>'
+);
+genSpaceBtn.css("border-style", "hidden");
+genSpaceBtn.css("background-color", "#D9D9D9");
+
+genSpaceDiv.append(genSpaceBtn);
+
+buttonContainer.append(genSpaceDiv);
+
+// forth button:
 // generate robotic arm
 var genArmDiv = $('<div class="genArm"></div>');
 var genArmBtn = $(
@@ -92,7 +124,7 @@ genArmDiv.append(genArmBtn);
 
 buttonContainer.append(genArmDiv);
 
-// forth button:
+// fifth button:
 // animation
 var animateDiv = $('<div class="animate"></div>');
 var animateBtn = $(
@@ -105,8 +137,8 @@ animateDiv.append(animateBtn);
 
 buttonContainer.append(animateDiv);
 
-// fifth button:
-// animation
+// sixth button:
+// export
 var exportDiv = $('<div class="export"></div>');
 var exportBtn = $(
   '<button id="export"><img src="./buttons/export.svg"/></button>'
