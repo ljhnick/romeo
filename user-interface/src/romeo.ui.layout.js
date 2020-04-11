@@ -127,7 +127,7 @@ animateBtn.css("border-style", "hidden");
 animateBtn.css("background-color", "#D9D9D9");
 
 animateDiv.append(animateBtn);
-animateDiv.append(animateBtn1);
+// animateDiv.append(animateBtn1);
 
 
 buttonContainer.append(animateDiv);
@@ -165,4 +165,4 @@ optionMenuList.append(optionMenuAttach);
 
 optionMenu.append(optionMenuList);
 
-buttonContainer.append(optionMenu);
+container.append(optionMenu);
