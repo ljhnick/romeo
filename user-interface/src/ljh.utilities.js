@@ -53,6 +53,7 @@ function loadStl(data) {
 		});	
 	} else {
 			var object = new THREE.Mesh(geometry, MATERIALCONTRAST);
+			object.renderOrder = 1;
 			scene.add(object);
 			objects.push(object);
 	}
