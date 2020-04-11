@@ -184,3 +184,4 @@ var initPanel = function () {
     gStep = 5;
   });
 };
+

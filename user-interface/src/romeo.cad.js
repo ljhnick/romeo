@@ -14,9 +14,12 @@ class CAD {
 		this._taskType = TASKTYPE;
 		this._unfoldPl = workspace._unfoldPl;
 		this._bboxCenter = getBoundingBoxCenter(this._obj);
+		this._genWorkspace = workspace;
 		this._init();
 		this._bboxPointArrayNew();
 		this._loadMotorSTL();
+		this._checkLoop();
+		this._interpolateQ();
 	}
 
 	_init() {
@@ -76,6 +79,45 @@ class CAD {
 		}
 	}
 
+	_checkLoop() {
+		// check if the result is a loop
+		// var startPoint = tarPoints._points[0].pos;
+		// var endPoint = tarPoints._points[tarPoints._points.length-1].pos;
+		
+		// var dist = startPoint.distanceTo(endPoint);
+		// if (dist <= 20) {
+		// 	this._isloop = true;
+		// } else {
+		// 	this._isloop = false;
+		// }
+
+		this._isloop = tarPoints._isloop;
+	}
+
+	_interpolateQ() {
+		var tarQ = this._genWorkspace._tarQ;
+		var q0 = this._genWorkspace._q0;
+		var q = [];
+		var time_int = 120;
+
+		for (var i = 0; i < tarQ.length; i++) {
+			if (i == 0) {
+				if (!this._isloop && (OBJECTTYPE == OBJFIX || genWorkspace._IFSTRIP == 1)) {
+					q = interpQ(tarQ[0], q0, time_int);
+				}
+				continue;
+			}
+		q = q.concat(interpQ(tarQ[i], tarQ[i-1], time_int));
+		}
+
+		if (this._isloop) {
+			q = q.concat(interpQ(tarQ[0], tarQ[tarQ.length-1], time_int));
+		}
+
+		this.q = q;
+		this.q0 = q0;
+	}
+
 }
 
 class ObjFixedCAD extends CAD {
@@ -125,7 +167,15 @@ class ObjFixedCAD extends CAD {
 		var raycaster = new THREE.Raycaster();
 		raycaster.set(new THREE.Vector3(0,this._bboxParamsNew.leny/2+1,0), new THREE.Vector3(0,-1,0));
 		var intersects = raycaster.intersectObjects([this._meshTransNew]);
-		if (intersects.length == 4) {
+
+		var intClean = [];
+		intClean.push(intersects[0]);
+		for (var i = 1; i < intersects.length; i++) {
+			if (intersects[i].distance-intersects[i-1].distance > 5) {
+				intClean.push(intersects[i]);
+			}
+		}
+		if (intClean.length >= 4) {
 			var holeSizeY = intersects[1].distance - intersects[intersects.length-2].distance;
 		} else {
 			var holeSizeY = 0;
@@ -136,7 +186,14 @@ class ObjFixedCAD extends CAD {
 		var raycaster = new THREE.Raycaster();
 		raycaster.set(new THREE.Vector3(this._bboxParamsNew.lenx/2+1, 0, 0), new THREE.Vector3(-1, 0, 0));
 		var intersects = raycaster.intersectObjects([this._meshTransNew]);
-		if (intersects.length == 4) {
+		var intClean = [];
+		intClean.push(intersects[0]);
+		for (var i = 1; i < intersects.length; i++) {
+			if (intersects[i].distance-intersects[i-1].distance > 5) {
+				intClean.push(intersects[i]);
+			}
+		}
+		if (intClean.length >= 4) {
 			var holeSizeX = intersects[1].distance - intersects[intersects.length-2].distance;
 		} else {
 			var holeSizeX = 0;
@@ -309,6 +366,13 @@ class ObjFixedCAD extends CAD {
 
 	}
 
+	_animation(index) {
+		animateFlag = 1;
+		// this.interpolateQ();
+		this._animate(this.q[index], this.q0);
+		return this.q.length;
+	}
+
 	_animate(target_q, q0) {
 		var secondIndex;
 		var joint1ang = target_q[0] - q0[0];
@@ -327,7 +391,7 @@ class ObjFixedCAD extends CAD {
 				break;
 			case 3:
 				secondIndex = 1;
-				var joint2ang = -(target_q[secondIndex] - q0[secondIndex]);
+				var joint2ang = (target_q[secondIndex] - q0[secondIndex]);
 				this._joint2.rotation.z = joint2ang;
 				break;
 		}
@@ -343,10 +407,10 @@ class ObjFixedCAD extends CAD {
 		this._link3STL = this._linkJoint3(this._link3, this._pivot4, this._pivot3);
 		this._link4STL = this._linkJoint4(this._link4, this._pivot5, this._pivot4, this._taskType);
 
-		scene.add(this._link1STL);
-		scene.add(this._link2STL);
-		scene.add(this._link3STL);
-		scene.add(this._link4STL);
+		// scene.add(this._link1STL);
+		// scene.add(this._link2STL);
+		// scene.add(this._link3STL);
+		// scene.add(this._link4STL);
 	}
 
 	_linkJoint1(link, pivot, pivot_prev, jtType) {
@@ -1105,6 +1169,13 @@ class ObjMovingCAD extends CAD {
 
 	}
 
+	_animation(index) {
+		animateFlag = 1;
+		// this.interpolateQ();
+		this._animate(this.q[index], this.q0);
+		return this.q.length;
+	}
+
 	_animate(target_q, q0) {
 		var firstIndex;
 		var joint2ang = target_q[3] - q0[3];
@@ -1141,10 +1212,10 @@ class ObjMovingCAD extends CAD {
 		this._link3STL = this._linkJoint3(this._link3, this._pivot3, this._pivot4);
 		this._link4STL = this._linkJoint4(this._link4, this._pivot4);
 
-		scene.add(this._link1STL);
-		scene.add(this._link2STL);
-		scene.add(this._link3STL);
-		scene.add(this._link4STL);
+		// scene.add(this._link1STL);
+		// scene.add(this._link2STL);
+		// scene.add(this._link3STL);
+		// scene.add(this._link4STL);
 	}
 
 	_linkJoint1(link, pivot, pivot_next, jtType) {
@@ -1821,6 +1892,13 @@ class ObjStripCAD extends CAD {
 
 	}
 
+	_animation(index) {
+		animateFlag = 1;
+		// this.interpolateQ();
+		this._animate(this.q[index], this.q0);
+		return this.q.length;
+	}
+
 	_animate(target_q, q0) {
 		var firstIndex;
 		var joint2ang = target_q[3] - q0[3];
@@ -1929,10 +2007,10 @@ class ObjStripCAD extends CAD {
 		this._link3STL = this._linkJointZ(this._link3, this._pivot3, this._pivot4);
 		this._link4STL = this._linkJointZ(this._link4, this._pivot4);
 
-		scene.add(this._link1STL);
-		scene.add(this._link2STL);
-		scene.add(this._link3STL);
-		scene.add(this._link4STL);
+		// scene.add(this._link1STL);
+		// scene.add(this._link2STL);
+		// scene.add(this._link3STL);
+		// scene.add(this._link4STL);
 	}
 
 	_linkJointX(link, pivot, pivot_next) {

@@ -5,20 +5,29 @@ function [ output_data ] = main_func( input )
 % user_input; % load user input from the interface
 
 input_data = jsondecode(input);
-[type, transformable, obstacle, target_points, target_ori, T_final, IFSTRIP, POSITION, center, unfolding] = parseData(input_data);
+result = parseData(input_data);
 
-% extract the values
-% type = input_data.type;
-% obstacle = input_data.obstacle;
-% target_points = input_data.points;
-
-
+type = result.type;
+transformable = result.transformable;
+obstacle = result.obstacle;
+target_points = result.targetPoints;
+target_ori = result.targetOri;
+T_final = result.T_final;
+IFSTRIP = result.IFSTRIP;
+POSITION = result.POSITION;
+center = result.center;
+unfolding = result.unfoldingPl;
 
 
 %% generate the transformable arm
 % trans_arm = transformPart(type, transformable, obstacle, target_points, target_ori);
-length = transformable(1)*0.8;
-width = transformable(2)*0.8;
+if IFSTRIP == 0
+    length = transformable(1)*0.95;
+    width = transformable(2)*0.95;
+else
+    length = transformable(1);
+    width = transformable(2);
+end
 % based on the 
 
 if IFSTRIP == 0
@@ -43,9 +52,9 @@ elseif IFSTRIP == 1
         P0 = [0, 0, width/2];
     end
     
-    for i = 1:numel(target_points)
-        target_points{i} = target_points{i}-P0;
-    end
+%     for i = 1:numel(target_points)
+%         target_points{i} = target_points{i}-P0;
+%     end
     
     [DH, q0, q] = dh_obj_strip(length, width);
 end
@@ -85,12 +94,23 @@ for i = 1:numel(min_dist)
     for index = 1:7
         q_target{i}(index) = Q{index}(n);
     end
+    
+    nearestPoint{i} = (T_final\(min_dist{i}{2}+center)')';
 %     figure(i);
 %     trans_arm.plot(q_target{i});
 end
 
 
-output_data = struct('workspace', {WS}, 'jointType', I, 'allQ', {Q}, 'targetQ', {q_target}, 'q0', q0, 'basePos', POSITION, 'unfoldingPl', unfolding, 'IFSTRIP', IFSTRIP);
+
+output_data = struct('workspace', {WS}, ...
+                     'jointType', I, ...
+                     'allQ', {Q}, ...
+                     'targetQ', {q_target}, ...
+                     'q0', q0, ...
+                     'basePos', POSITION, ...
+                     'unfoldingPl', unfolding, ...
+                     'IFSTRIP', IFSTRIP, ...
+                     'nearestPoint', {nearestPoint});
 
 end
 

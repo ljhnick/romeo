@@ -96,3 +96,90 @@ function boolean(obj1, obj2, type) {
 	meshBoolean = csgBoolean.toMesh(csgBoolean, MATERIALNORMAL);
 	return meshBoolean;
 }
+
+
+/*
+ 	renderer
+*/
+function renderScene() {
+	// below is for the tranformation animation]
+	var left, bottom, width, height;
+	if (gStep != 2) {
+		left = 0;
+		bottom = 0;
+		width = 1*window.innerWidth;
+		height = 1*window.innerHeight;
+		renderer.setViewport(left, bottom, width, height);
+		renderer.setScissor( left, bottom, width, height );
+		renderer.setScissorTest( true );
+		// renderer.setClearColor( view.background );
+		camera.aspect = width/height;
+		camera.updateProjectionMatrix();
+
+		lights[0].position.copy(camera.position);
+		renderer.render(scene, camera);
+	}
+	
+
+	switch (gStep) {
+		case 2:
+			left = 0;
+			bottom = 1;
+			width = 0.8*window.innerWidth;
+			height = 1*window.innerHeight;
+			renderer.setViewport(left, bottom, width, height);
+			renderer.setScissor( left, bottom, width, height );
+			renderer.setScissorTest( true );
+			// renderer.setClearColor( view.background );
+			camera.aspect = width/height;
+			camera.updateProjectionMatrix();
+
+			lights[0].position.copy(camera.position);
+			renderer.render(scene, camera);
+
+			// var left, bottom, width, height;
+			left = 0.8*window.innerWidth;
+			bottom = 0.5*window.innerHeight;
+			width = 0.2*window.innerWidth;
+			height = 0.5*window.innerHeight;
+			renderer.setViewport(left, bottom, width, height);
+			renderer.setScissor( left, bottom, width, height );
+			renderer.setScissorTest( true );
+			cameraTop.aspect = width/height;
+			cameraTop.updateProjectionMatrix();
+			renderer.render(scene, cameraTop);
+
+			// var left, bottom, width, height;
+			left = 0.8*window.innerWidth;
+			bottom = 0*window.innerHeight;
+			width = 0.2*window.innerWidth;
+			height = 0.5*window.innerHeight;
+			renderer.setViewport(left, bottom, width, height);
+			renderer.setScissor( left, bottom, width, height );
+			renderer.setScissorTest( true );
+			cameraLeft.aspect = width/height;
+			cameraLeft.updateProjectionMatrix();
+			renderer.render(scene, cameraLeft);
+
+			break;
+		case 4:
+			if (animateFlag == 1) {
+				var qLength = animateArm._animation(animateIndex);
+				if (animateIndex == qLength-1) {
+					if (waitIndex == waitSec*60-1) {
+						animateIndex = 0;
+						waitIndex = 0;
+					} else {
+						waitIndex++;	
+					}
+					
+				} else {
+					animateIndex ++;
+				}
+			}
+			break;
+	}
+	
+
+}
+

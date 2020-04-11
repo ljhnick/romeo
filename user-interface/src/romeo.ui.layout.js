@@ -119,6 +119,7 @@ buttonContainer.append(genArmDiv);
 // fifth button:
 // animation
 var animateDiv = $('<div class="animate"></div>');
+
 var animateBtn = $(
   '<button id="animate"><img src="./buttons/start.svg"/></button>'
 );
@@ -126,6 +127,8 @@ animateBtn.css("border-style", "hidden");
 animateBtn.css("background-color", "#D9D9D9");
 
 animateDiv.append(animateBtn);
+animateDiv.append(animateBtn1);
+
 
 buttonContainer.append(animateDiv);
 

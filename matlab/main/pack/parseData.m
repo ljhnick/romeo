@@ -1,4 +1,4 @@
-function [type_mat, transformable_mat, obstacle_mat, target_points_mat, target_ori_mat, T_final, IFSTRIP, POSITION, center, unfoldingPl] = parseData(input)
+function [result] = parseData(input)
 %PARSEDATA 此处显示有关此函数的摘要
 %   此处显示详细说明
 
@@ -112,6 +112,17 @@ if IFSTRIP == 1
     target_ori_mat = target_ori;
     obstacle_mat = obs;
     
+    result = struct('type', type_mat, ...
+                'transformable', transformable_mat, ...
+                'obstacle', {obstacle_mat}, ...
+                'targetPoints', {target_points_mat}, ...
+                'targetOri', {target_ori_mat}, ...
+                'T_final', T_final, ...
+                'IFSTRIP', IFSTRIP, ...
+                'POSITION', POSITION, ...
+                'center', center, ...
+                'unfoldingPl', unfoldingPl);
+    
     return;
 end
 
@@ -159,12 +170,12 @@ if type == 1
         target_p{i} = p - center;
     end
     
-    for i = 1:numel(target_p)
-        index1(i) = target_p{i}(1) > 0 && target_p{i}(2) > 0;
-        index2(i) = target_p{i}(1) < 0 && target_p{i}(2) > 0;
-        index3(i) = target_p{i}(1) < 0 && target_p{i}(2) < 0;
-        index4(i) = target_p{i}(1) > 0 && target_p{i}(2) < 0;
-    end
+%     for i = 1:numel(target_p)
+%         index1(i) = target_p{i}(1) > 0 && target_p{i}(2) > 0;
+%         index2(i) = target_p{i}(1) < 0 && target_p{i}(2) > 0;
+%         index3(i) = target_p{i}(1) < 0 && target_p{i}(2) < 0;
+%         index4(i) = target_p{i}(1) > 0 && target_p{i}(2) < 0;
+%     end
     
 %     if numel(find(index1)) == 0
 %         T_1 = eye(3);
@@ -215,6 +226,30 @@ if type == 1
 
         obs{i} = alphaShape([xmax, xmax, xmin, xmin, xmax, xmax, xmin, xmin]', [ymax, ymin, ymin, ymax, ymax, ymin, ymin, ymax]', [zmax, zmax, zmax, zmax, zmin, zmin, zmin, zmin]'); 
     end
+    
+    % add floor
+    floor = 0;
+    for i = 1:num_obs
+        if obstacle(i).ymin < floor
+            floor = obstacle(i).ymin;
+        end
+    end
+    
+    if floor < 0
+        obs_max = [1000, floor, 1000];
+        obs_min = [-1000, -1000, -1000];
+        obs_max = (T_final*obs_max')';
+        obs_min = (T_final*obs_min')';
+
+        xmax = obs_max(1)-center(1);
+        ymax = obs_max(2)-center(2);
+        zmax = obs_max(3)-center(3);
+        xmin = obs_min(1)-center(1);
+        ymin = obs_min(2)-center(2);
+        zmin = obs_min(3)-center(3);
+
+        obs{num_obs+1} = alphaShape([xmax, xmax, xmin, xmin, xmax, xmax, xmin, xmin]', [ymax, ymin, ymin, ymax, ymax, ymin, ymin, ymax]', [zmax, zmax, zmax, zmax, zmin, zmin, zmin, zmin]'); 
+    end
 
     
     
@@ -223,7 +258,7 @@ if type == 1
     obstacle_mat = obs;
     
 
-elseif type == 2
+elseif type == 2 % object moving
     %% type 2
     center = transformable.center;
     center = [center.x, center.y, center.z];
@@ -238,22 +273,7 @@ elseif type == 2
     axis = [axis.x, axis.y, axis.z];
     
     num_obs = length(obstacle);
-    
-    
-%     if num_obs > 1
-%         % more than 1 obstacle, means the transformable part is in the
-%         % middle, therefor the select plane is the unfolding plane
-%         index = find(axis~=0);
-%         if index == 1
-%             T = roty(-90);
-%         elseif index == 2
-%             T = rotx(90);
-%         else
-%             T = eye(3);
-%         end
-%         T1 = rotz(90)*rotx(90)*T;
-%     else
-        % less than 1 obstacle
+    % less than 1 obstacle
     index = find(axis~=0);
     if index == 1
         if leny > lenz
@@ -331,8 +351,8 @@ elseif type == 2
     
     % obstacle type 2
     for i = 1:num_obs
-        obs_max = [obstacle(i).xmax*0.9, obstacle(i).ymax*0.9, obstacle(i).zmax*0.9];
-        obs_min = [obstacle(i).xmin*0.9, obstacle(i).ymin*0.9, obstacle(i).zmin*0.9];
+        obs_max = [obstacle(i).xmax*0.9, obstacle(i).ymax, obstacle(i).zmax*0.9];
+        obs_min = [obstacle(i).xmin*0.9, obstacle(i).ymin, obstacle(i).zmin*0.9];
         obs_max = (T_final*obs_max')';
         obs_min = (T_final*obs_min')';
 
@@ -345,12 +365,20 @@ elseif type == 2
 
         obs{i} = alphaShape([xmax, xmax, xmin, xmin, xmax, xmax, xmin, xmin]', [ymax, ymin, ymin, ymax, ymax, ymin, ymin, ymax]', [zmax, zmax, zmax, zmax, zmin, zmin, zmin, zmin]'); 
     end
-
-    
     
     target_points_mat = target_p;
     target_ori_mat = target_ori;
     obstacle_mat = obs;
-
     
 end
+
+result = struct('type', type_mat, ...
+                'transformable', transformable_mat, ...
+                'obstacle', {obstacle_mat}, ...
+                'targetPoints', {target_points_mat}, ...
+                'targetOri', {target_ori_mat}, ...
+                'T_final', T_final, ...
+                'IFSTRIP', IFSTRIP, ...
+                'POSITION', POSITION, ...
+                'center', center, ...
+                'unfoldingPl', unfoldingPl);
