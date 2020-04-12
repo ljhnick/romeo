@@ -70,29 +70,23 @@ var initPanel = function () {
   //
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   specPtBtn.on("click", function (event) {
+  	gStep = 2;
+    axisBboxUI.endStep();
+
+    tarPoints = new AddPoints(transPtParams[0], transPlNormal);
     event.preventDefault();
   });
 
   objFixBtn.on("click", function (event) {
     event.preventDefault();
     /* Act on the event */
-    // console.log(event.which);
     OBJECTTYPE = OBJFIX;
-    gStep = 2;
-    axisBboxUI.endStep();
-
-    tarPoints = new AddPoints(transPtParams[0], transPlNormal);
   });
 
   objMoveBtn.on("click", function (event) {
     event.preventDefault();
     /* Act on the event */
-    // console.log(event.which);
     OBJECTTYPE = OBJMOV;
-    gStep = 2;
-    axisBboxUI.endStep();
-
-    tarPoints = new AddPoints(transPtParams[0], transPlNormal);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,9 +202,7 @@ genArmBtn.on("click", function (event) {
     		tarPoints.restart();
     		tarPoints = new AddPoints(transPtParams[0], transPlNormal);
     		break;
-
     }
   });
-
 };
 
