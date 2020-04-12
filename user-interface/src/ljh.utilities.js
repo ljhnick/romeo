@@ -71,7 +71,7 @@ function loadStl(data) {
 /*
 	add axis onto the mesh
 */
-function addAxisHelper(object, length) {
+function addAxisHelper(object, dims) {
 	var origin = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
 
 	// add X Y Zaxis
@@ -84,9 +84,9 @@ function addAxisHelper(object, length) {
 	var hexY = 0x00ff00;
 	var hexZ = 0x0000ff;
 
-	var axisX = new THREE.ArrowHelper(dirX, origin, length, hexX, length/2, length/3);
-	var axisY = new THREE.ArrowHelper(dirY, origin, length, hexY, length/2, length/3);
-	var axisZ = new THREE.ArrowHelper(dirZ, origin, length, hexZ, length/2, length/3);
+	var axisX = new THREE.ArrowHelper(dirX, origin, dims[0]/1.5, hexX, dims[0]/1.5/4, dims[0]/1.5/6);
+	var axisY = new THREE.ArrowHelper(dirY, origin, dims[1]/1.5, hexY, dims[0]/1.5/4, dims[0]/1.5/6);
+	var axisZ = new THREE.ArrowHelper(dirZ, origin, dims[2]/1.5, hexZ, dims[0]/1.5/4, dims[0]/1.5/6);
 
 	scene.add(axisX);
 	scene.add(axisY);
@@ -104,7 +104,7 @@ function addAxisHelper(object, length) {
 function addAnArrow (center, vector) {
 	var len = vector.length();
 	vector.normalize();
-	var color = 0xff0000;
+	var color = 0x000000;
 	var arrow = new THREE.ArrowHelper(vector, center, len*2, color, len/2, len/5);
 	return arrow;
 }
@@ -119,8 +119,8 @@ function highlightAxis(x, y, axis) {
 	var intsZ = rayCast(x, y, axis[2].children);
 
 	for (var i = 0; i < axis.length; i++) {
-		axis[i].line.material.opacity = 0.4;
-		axis[i].cone.material.opacity = 0.4;
+		axis[i].line.material.opacity = 0.2;
+		axis[i].cone.material.opacity = 0.2;
 	}
 	
 	var axisSel = '';

@@ -145,6 +145,19 @@ exportDiv.append(exportBtn);
 
 buttonContainer.append(exportDiv);
 
+
+// export
+var restartDiv = $('<div class="restart"></div>');
+var restartBtn = $(
+  '<button id="export">restart</button>'
+);
+restartBtn.css("border-style", "hidden");
+restartBtn.css("background-color", "#D9D9D9");
+
+restartDiv.append(restartBtn);
+
+buttonContainer.append(restartDiv);
+
 // option menue:
 var optionMenu = $('<div class="optionMenu"></div>');
 optionMenu.css("position", "absolute");

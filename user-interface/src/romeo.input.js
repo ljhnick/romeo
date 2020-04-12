@@ -6,7 +6,7 @@
  */
 
 // mouse controls
-gMouseCtrls.rotateSpeed = 5.0;
+gMouseCtrls.rotateSpeed = 2.0;
 gMouseCtrls.zoomSpeed = 0.5;
 gMouseCtrls.panSpeed = 2;
 

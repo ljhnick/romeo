@@ -24,6 +24,7 @@ var COLORCONTRAST = 0xD1D6E7; // is the contrast of the COLORNORMAL
 var COLOROVERLAY = 0xF2F2F2; // 
 var COLORHIGHLIGHT = 0xfffa90; //
 var COLORSTROKE = 0xE82C0C;
+var COLORYELLOW = 0xfffa90;
 
 
  // set up three js renderer
@@ -42,9 +43,11 @@ var gMouseCtrls = new THREE.TrackballControls(camera, undefined, gLookAt); // fo
 
 var cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
 var cameraLeft = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
-cameraTop.position.set(0, 1000, 0);
+// var cameraLeft = new THREE.OrthographicCamera(-200, 200, 200, -200, 1, 1000);
+
+cameraTop.position.set(0, 600, 0);
 cameraTop.lookAt(new THREE.Vector3(0,0,0));
-cameraLeft.position.set(-1000, 0, 0);
+cameraLeft.position.set(-600, 0, 0);
 cameraLeft.lookAt(new THREE.Vector3(0,0,0));
 
 //
@@ -88,7 +91,7 @@ function drawGrid(yOffset) {
 var lights = [];
 lights[0] = new THREE.PointLight(0xffffff, 1, 0);
 lights[0].position.set(0, 100, -100);
-lights[0].castShadow = true;
+// lights[0].castShadow = true;
 scene.add(lights[0]);
 
 /*
@@ -139,9 +142,17 @@ var MATERIALINVISIBLE= new THREE.MeshBasicMaterial({
 // });
 
 var MATERIALGREEN = new THREE.MeshPhongMaterial({
-     color: 0x65E604,
+     // color: 0x65E604,
+     color: 0xDB5B8A,
      transparent: true,
      opacity: 0.75
+});
+
+var MATERIALYELLOW = new THREE.MeshPhongMaterial({
+     color: COLORYELLOW,
+     transparent: true,
+     opacity: 0.75,
+     side: THREE.DoubleSide
 });
 
 var MATERIALOBSTACLE = new THREE.MeshPhongMaterial({
@@ -159,18 +170,18 @@ var MATERIALVOXEL = new THREE.MeshPhongMaterial({
 
 var MATERIALPOINT = new THREE.MeshPhongMaterial({
      // color: 0x65E604,
-     color: COLORNORMAL,
+     color: 0X000000,
      transparent: false,
      opacity: 1,
      // wireframe: true
 })
 
 var MATERIALLINE = new THREE.LineBasicMaterial({
-     color: COLORNORMAL
+     color: 0x000000
 });
 
 var MATERIALSOLID = new THREE.MeshPhongMaterial({
-     color: COLORNORMAL,
+     color: 0x000000,
      transparent: false
 })
 

@@ -36,6 +36,7 @@ class CAD {
 				this._initialR = ['x', Math.PI/2];
 				break;
 			case 3:
+				this._initialR = ['z', 0];
 				break;
 		}
 		var meshTrans = new THREE.Mesh(geoTrans);

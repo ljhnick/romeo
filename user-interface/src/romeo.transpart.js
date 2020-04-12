@@ -25,7 +25,7 @@ class BboxUI {
 	}
 
 	_addPlane(lx, ly, lz, nml, cx, cy, cz) {
-		var pl = new ljhRectVolume(lx, ly, lz, this._visible == true ? MATERIALGREEN : MATERIALCONTRAST);
+		var pl = new ljhRectVolume(lx, ly, lz, this._visible == true ? MATERIALYELLOW : MATERIALCONTRAST);
 		// scaleAroundCenter(pl.m, 1.1);
 		rotateObjTo(pl.m, nml);
 		pl.m.normal = nml;
@@ -97,13 +97,9 @@ class BboxUI {
 
 		if (this._box != undefined && this._box.length > 0) {
 			for (var i = this._box.length - 1; i >= 0; i--) {
-				if (this._box[i] != this._pl) {
-					scene.remove(this._box[i]);
-					// scene.remove(boxNew[i]);
-					this._box[i] = boxNew[i];
-				} else {
-					scene.remove(boxNew[i]);
-				}
+				scene.remove(this._box[i]);
+				// scene.remove(boxNew[i]);
+				this._box[i] = boxNew[i];
 			}
 		} else {
 			this._box = boxNew;
@@ -145,6 +141,7 @@ class AxisBboxUI extends BboxUI {
 		}
 		var ints = rayCast(e.clientX, e.clientY, this._boxSel);
 		// console.log(ints);
+		// console.log(this._boxSel[0], this._boxSel[1]);
 		if (ints.length > 0) {
 			this._pl = ints[0].object; // the plane being moved
 			this._point = ints[0].point; // intersecting point

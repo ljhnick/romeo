@@ -66,6 +66,7 @@ class AddPoints extends TargetPoints {
 		this._optionMode = false; // option means choosing task type
 		this._addMode = '2d';
 		this._sphereOriArrow = [];
+		this._oriArrow = [];
 		this._objectType = OBJECTTYPE;
 		this._targetPointsLine = [];
 		this._targetPointsLineCone = [];
@@ -84,7 +85,7 @@ class AddPoints extends TargetPoints {
 		var posNew = oriPt.add(vecOff);
 
 		var cube = new THREE.SphereGeometry(3, 32, 32);
-		var cubeMesh = new THREE.Mesh(cube, MATERIALNORMAL);
+		var cubeMesh = new THREE.Mesh(cube, MATERIALSOLID);
 		cubeMesh.position.copy(posNew);
 		var cubeAtPoint = cubeMesh;
 
@@ -115,7 +116,7 @@ class AddPoints extends TargetPoints {
 					var dir = center.sub(point);
 					dir.normalize();
 					// var hex = 0x65E604;
-					var hex = 0xDB5B8A;
+					var hex = 0x000000;
 					var arrowRef = new THREE.ArrowHelper(dir, point, length, hex, 20);
 					scene.add(arrowRef);
 					this._arrowRef = arrowRef;
@@ -138,7 +139,7 @@ class AddPoints extends TargetPoints {
 					var center = new THREE.Vector3(this._bboxParams.ctrx, origin.y, this._bboxParams.ctrz);
 					var length = origin.distanceTo(center);
 					var dir = center.sub(origin);
-					var hex = COLORNORMAL;
+					var hex = 0x000000;
 					var arrowRef = new THREE.ArrowHelper(dir, origin, length, hex, 20);
 					scene.add(arrowRef);
 					this._arrowRef = arrowRef;
@@ -157,7 +158,7 @@ class AddPoints extends TargetPoints {
 					var fstPoint = ints[0].point;
 					var center = this._sphereOri.position;
 					var vec = fstPoint.sub(center);
-					var arrow = addAnArrow(center, vec, COLORNORMAL);
+					var arrow = addAnArrow(center, vec, 0x000000);
 					scene.add(arrow);
 					this._movingOri = vec;
 					this._sphereOriArrow[0] = arrow;
@@ -260,6 +261,7 @@ class AddPoints extends TargetPoints {
 				this.connectPoints();
 
 				scene.remove(this._sphereOri);
+				this._oriArrow.push(this._sphereOriArrow);
 				this._sphereOriArrow = [];
 				this._addMode = 'option';
 				break;
@@ -447,7 +449,7 @@ class AddPoints extends TargetPoints {
 			var lineMesh = new MeshLine();
 			lineMesh.setGeometry(geometry);
 
-			var mat = new MeshLineMaterial({color: COLORNORMAL, lineWidth: 2});
+			var mat = new MeshLineMaterial({color: 0x000000, lineWidth: 2});
 			// mat.color = COLORNORMAL;
 			// mat.lineWidth = 5;
 
@@ -470,7 +472,7 @@ class AddPoints extends TargetPoints {
 			var radians = Math.acos(dir.y);
 
 			var coneGeo = new THREE.ConeGeometry(3, 15, 32);
-			var cone = new THREE.Mesh(coneGeo, MATERIALNORMAL);
+			var cone = new THREE.Mesh(coneGeo, MATERIALSOLID);
 			cone.quaternion.setFromAxisAngle(_axis, radians);
 			cone.position.copy(center);
 
@@ -501,7 +503,7 @@ class AddPoints extends TargetPoints {
 			var radians = Math.acos(dir.y);
 
 			var coneGeo = new THREE.ConeGeometry(2, 10, 32);
-			var cone = new THREE.Mesh(coneGeo, MATERIALNORMAL);
+			var cone = new THREE.Mesh(coneGeo, MATERIALSOLID);
 			cone.quaternion.setFromAxisAngle(_axis, radians);
 			cone.position.copy(center);
 			scene.add(cone);
@@ -522,6 +524,26 @@ class AddPoints extends TargetPoints {
 		}
 		scene.remove(this._line);
 		this.packData();
+
+	}
+
+	restart() {
+		this.endStep();
+		// clean scene first
+		for (var i = 0; i < this._pointsMesh.length; i++) {
+			scene.remove(this._pointsMesh[i]);
+		}
+
+		for (var i = 0; i < this._targetPointsLine.length; i++) {
+			scene.remove(this._targetPointsLine[i]);
+			scene.remove(this._targetPointsLineCone[i]);
+		}
+
+		for (var i = 0; i < this._oriArrow.length; i++) {
+			scene.remove(this._oriArrow[i]);
+		}
+		
+
 
 	}
 

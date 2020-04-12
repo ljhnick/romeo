@@ -59,7 +59,7 @@ var initPanel = function () {
     var object = objects[0];
     var dims = getBoundingBoxDimensions(object);
 
-    var axisHelp = addAxisHelper(object, dims[0]);
+    var axisHelp = addAxisHelper(object, dims);
     // specifying accessible area
     axisBboxUI = new AxisBboxUI(object, axisHelp);
   });
@@ -114,8 +114,7 @@ var initPanel = function () {
   //	Step 5 - ANIMATION
   //
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  animateBtn.on("click", function (event) {
+genArmBtn.on("click", function (event) {
     event.preventDefault();
     /* Act on the event */
     gStep = 4;
@@ -138,6 +137,16 @@ var initPanel = function () {
         animateArm._updateScene();
         break;
     }
+    // animateArm = new ObjFixedCAD(axisBboxUI._transPt, genWorkspace._basePos, genWorkspace._jointType, 0, TRAJFOLLOW, genWorkspace._unfoldPl);
+    // animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
+  });
+
+
+  animateBtn.on("click", function (event) {
+    event.preventDefault();
+    /* Act on the event */
+
+    animateFlag = 1;
     // animateArm = new ObjFixedCAD(axisBboxUI._transPt, genWorkspace._basePos, genWorkspace._jointType, 0, TRAJFOLLOW, genWorkspace._unfoldPl);
     // animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
   });
@@ -183,5 +192,25 @@ var initPanel = function () {
 
     gStep = 5;
   });
+
+
+ /////////////////////////////////
+ ///// restart
+ /////////////////////////////////
+  restartBtn.on("click", function (event) {
+    event.preventDefault();
+    /* Act on the event */
+    switch (gStep) {
+    	case 1:
+    		axisBboxUI.endStep();
+    		break;
+    	case 2:
+    		tarPoints.restart();
+    		tarPoints = new AddPoints(transPtParams[0], transPlNormal);
+    		break;
+
+    }
+  });
+
 };
 
