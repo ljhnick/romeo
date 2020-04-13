@@ -41,6 +41,9 @@ var restartDiv = $('<div class="restart"></div>');
 var restartBtn = $(
   '<button id="export"><img src="./buttons/back.svg"/></button>'
 );
+restartBtn.css("background-color", "#f2f0f0");
+restartBtn.css("border-style", "hidden");
+
 restartBtn.css("border-style", "hidden");
 restartBtn.css("box-sizing", "border-box");
 restartBtn.css("position", "absolute");
