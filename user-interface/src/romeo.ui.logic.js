@@ -101,6 +101,8 @@ var initPanel = function () {
     tarPoints.endStep();
 
     genWorkspace = new Workspace(tarPoints);
+    // if all the points are inside the workspace
+    // skip showing the workspace
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,26 +113,29 @@ var initPanel = function () {
 genArmBtn.on("click", function (event) {
     event.preventDefault();
     /* Act on the event */
-    gStep = 4;
-    genWorkspace.clear();
+    if (gStep != 4) {
+    	gStep = 4;
+	    genWorkspace.clear();
 
-    switch (genWorkspace._IFSTRIP) {
-      case 1:
-        animateArm = new ObjStripCAD(axisBboxUI, genWorkspace);
-        animateArm._updateScene();
-        break;
-      case 0:
-        switch (OBJECTTYPE) {
-          case OBJFIX:
-            animateArm = new ObjFixedCAD(axisBboxUI, genWorkspace);
-            break;
-          case OBJMOV:
-            animateArm = new ObjMovingCAD(axisBboxUI, genWorkspace);
-            break;
-        }
-        animateArm._updateScene();
-        break;
+	    switch (genWorkspace._IFSTRIP) {
+	      case 1:
+	        animateArm = new ObjStripCAD(axisBboxUI, genWorkspace);
+	        animateArm._updateScene();
+	        break;
+	      case 0:
+	        switch (OBJECTTYPE) {
+	          case OBJFIX:
+	            animateArm = new ObjFixedCAD(axisBboxUI, genWorkspace);
+	            break;
+	          case OBJMOV:
+	            animateArm = new ObjMovingCAD(axisBboxUI, genWorkspace);
+	            break;
+	        }
+	        animateArm._updateScene();
+	        break;
+	    }
     }
+    
     // animateArm = new ObjFixedCAD(axisBboxUI._transPt, genWorkspace._basePos, genWorkspace._jointType, 0, TRAJFOLLOW, genWorkspace._unfoldPl);
     // animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
   });
@@ -141,8 +146,6 @@ genArmBtn.on("click", function (event) {
     /* Act on the event */
 
     animateFlag = 1;
-    // animateArm = new ObjFixedCAD(axisBboxUI._transPt, genWorkspace._basePos, genWorkspace._jointType, 0, TRAJFOLLOW, genWorkspace._unfoldPl);
-    // animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

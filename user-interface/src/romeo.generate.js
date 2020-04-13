@@ -10,6 +10,7 @@ class Workspace {
 		this._data = target._data;
 		this._update(this._data);
 		this._wsVoxel = [];
+		this._isinside = true;
 	}
 
 	_update(data) {
@@ -108,6 +109,8 @@ class Workspace {
 		var voxCoor = reduceNum(x, y, z);
 		this._wsCoor = voxCoor;
 		this._plotVoxel(this._wsCoor, scale);
+		this._checkTargetPoints();
+		this._generateArm();
 	}
 
 	_plotVoxel(voxelData, scale) {
@@ -134,6 +137,45 @@ class Workspace {
 		// singleGeometry.mergeVertices();
 		this._workspaceHull = new THREE.Mesh(singleGeometry, MATERIALVOXEL);
 		scene.add(this._workspaceHull);
+	}
+
+	_checkTargetPoints() {
+		var pointsMesh = tarPoints._pointsMesh;
+		for (var i = 0; i < pointsMesh.length; i++) {
+			var ray = new THREE.Raycaster();
+			var dir = new THREE.Vector3(0, 0, 0).sub(pointsMesh[i].position).normalize();
+			ray.set(pointsMesh[i].position, dir);
+			var ints = ray.intersectObject(this._workspaceHull);
+			if (ints.length > 0) {
+				this._isinside = false;
+				pointsMesh[i].material = MATERIALRED;
+			}
+		}
+	}
+
+	_generateArm() {
+		if (this._isinside) {
+    	gStep = 4;
+	    this.clear();
+
+	    switch (this._IFSTRIP) {
+	      case 1:
+	        animateArm = new ObjStripCAD(axisBboxUI, this);
+	        animateArm._updateScene();
+	        break;
+	      case 0:
+	        switch (OBJECTTYPE) {
+	          case OBJFIX:
+	            animateArm = new ObjFixedCAD(axisBboxUI, this);
+	            break;
+	          case OBJMOV:
+	            animateArm = new ObjMovingCAD(axisBboxUI, this);
+	            break;
+	        }
+	        animateArm._updateScene();
+	        break;
+	    }
+    }
 	}
 
 	clear() {

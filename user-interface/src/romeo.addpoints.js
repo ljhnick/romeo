@@ -414,6 +414,7 @@ class AddPoints extends TargetPoints {
 		var ints = rayCast(e.clientX, e.clientY, this._pointsMesh);
 		if (ints.length > 0) {
 			var index = ints[0].object.index;
+			ints[0].object.material = MATERIALPOINT;
 			ints[0].object.position.copy(genWorkspace._snapToPoint[index]);
 			this.connectPoints();
 		}
