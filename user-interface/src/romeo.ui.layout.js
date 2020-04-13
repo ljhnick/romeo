@@ -10,7 +10,6 @@ container.css("box-sizing", "border-box");
 container.css("display", "flex");
 container.css("flex-direction", "column");
 container.css("align-items", "center");
-container.css("background-color", "white");
 
 container.css("width", "100%");
 container.css("height", "100%");
@@ -36,6 +35,21 @@ title.css("margin", "0");
 container.append(title);
 
 /*
+  back button
+*/
+var restartDiv = $('<div class="restart"></div>');
+var restartBtn = $(
+  '<button id="export"><img src="./buttons/back.svg"/></button>'
+);
+restartBtn.css("border-style", "hidden");
+restartBtn.css("box-sizing", "border-box");
+restartBtn.css("position", "absolute");
+restartBtn.css("top", "7.5em");
+restartBtn.css("left", "2.5em");
+restartDiv.append(restartBtn);
+container.append(restartDiv);
+
+/*
 	4 buttons
 */
 
@@ -46,7 +60,6 @@ buttonContainer.css("display", "flex");
 buttonContainer.css("justify-content", "center");
 buttonContainer.css("background-color", "#D9D9D9");
 buttonContainer.css("padding", "1em");
-buttonContainer.css("width", "40%");
 buttonContainer.css("border-radius", "5px");
 buttonContainer.css("position", "absolute");
 buttonContainer.css("bottom", "2em");
@@ -129,7 +142,6 @@ animateBtn.css("background-color", "#D9D9D9");
 animateDiv.append(animateBtn);
 // animateDiv.append(animateBtn1);
 
-
 buttonContainer.append(animateDiv);
 
 // sixth button:
@@ -144,19 +156,6 @@ exportBtn.css("background-color", "#D9D9D9");
 exportDiv.append(exportBtn);
 
 buttonContainer.append(exportDiv);
-
-
-// export
-var restartDiv = $('<div class="restart"></div>');
-var restartBtn = $(
-  '<button id="export">restart</button>'
-);
-restartBtn.css("border-style", "hidden");
-restartBtn.css("background-color", "#D9D9D9");
-
-restartDiv.append(restartBtn);
-
-buttonContainer.append(restartDiv);
 
 // option menue:
 var optionMenu = $('<div class="optionMenu"></div>');
