@@ -11,7 +11,7 @@ var axisBboxUI = [];
 
 // create points
 var tarPoints = [];
-var OBJECTTYPE;
+
 
 // generate workspace
 var genWorkspace;
@@ -77,16 +77,70 @@ var initPanel = function () {
     event.preventDefault();
   });
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  //	Step 4 - generate workspace (and arm)
+  //
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
   objFixBtn.on("click", function (event) {
     event.preventDefault();
     /* Act on the event */
     OBJECTTYPE = OBJFIX;
+
+    gStep = 3;
+    tarPoints.endStep();
+
+    if (genWorkspace != undefined) {
+    	genWorkspace.clear();
+    }
+
+    genWorkspace = new Workspace(tarPoints);
+
+    objFixBtn.hide();
+    objMoveBtn.show();
+
+  });
+
+  objFixBtn.on("mousedown", function (event) {
+    event.preventDefault();
+    /* Act on the event */
+    if (event.which == RIGHTMOUSE) {
+	    objFixBtn.hide();
+	    objMoveBtn.show();
+    }
+
   });
 
   objMoveBtn.on("click", function (event) {
     event.preventDefault();
     /* Act on the event */
     OBJECTTYPE = OBJMOV;
+
+    gStep = 3;
+    tarPoints.endStep();
+
+    
+    if (genWorkspace != undefined) {
+    	genWorkspace.clear();
+    }
+
+    genWorkspace = new Workspace(tarPoints);
+
+    objFixBtn.show();
+    objMoveBtn.hide();
+
+  });
+
+  objMoveBtn.on("mousedown", function (event) {
+    event.preventDefault();
+    /* Act on the event */
+    if (event.which == RIGHTMOUSE) {
+	    objFixBtn.show();
+	    objMoveBtn.hide();
+    }
+
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,23 +148,54 @@ var initPanel = function () {
   //	Step 4 - generate and visualize workspace
   //
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  genSpaceBtn.on("click", function (event) {
-    event.preventDefault();
-    /* Act on the event */
-    gStep = 3;
-    tarPoints.endStep();
+  // genSpaceBtn.on("click", function (event) {
+  //   event.preventDefault();
+  //   /* Act on the event */
+  //   gStep = 3;
+  //   tarPoints.endStep();
 
-    genWorkspace = new Workspace(tarPoints);
-    // if all the points are inside the workspace
-    // skip showing the workspace
-  });
+  //   genWorkspace = new Workspace(tarPoints);
+  //   // if all the points are inside the workspace
+  //   // skip showing the workspace
+  // });
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   //	Step 5 - ANIMATION
   //
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-genArmBtn.on("click", function (event) {
+// genArmBtn.on("click", function (event) {
+//     event.preventDefault();
+//     /* Act on the event */
+//     if (gStep != 4) {
+//     	gStep = 4;
+// 	    genWorkspace.clear();
+
+// 	    switch (genWorkspace._IFSTRIP) {
+// 	      case 1:
+// 	        animateArm = new ObjStripCAD(axisBboxUI, genWorkspace);
+// 	        animateArm._updateScene();
+// 	        break;
+// 	      case 0:
+// 	        switch (OBJECTTYPE) {
+// 	          case OBJFIX:
+// 	            animateArm = new ObjFixedCAD(axisBboxUI, genWorkspace);
+// 	            break;
+// 	          case OBJMOV:
+// 	            animateArm = new ObjMovingCAD(axisBboxUI, genWorkspace);
+// 	            break;
+// 	        }
+// 	        animateArm._updateScene();
+// 	        break;
+// 	    }
+//     }
+    
+//     // animateArm = new ObjFixedCAD(axisBboxUI._transPt, genWorkspace._basePos, genWorkspace._jointType, 0, TRAJFOLLOW, genWorkspace._unfoldPl);
+//     // animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
+//   });
+
+
+  animateBtn.on("click", function (event) {
     event.preventDefault();
     /* Act on the event */
     if (gStep != 4) {
@@ -135,15 +220,6 @@ genArmBtn.on("click", function (event) {
 	        break;
 	    }
     }
-    
-    // animateArm = new ObjFixedCAD(axisBboxUI._transPt, genWorkspace._basePos, genWorkspace._jointType, 0, TRAJFOLLOW, genWorkspace._unfoldPl);
-    // animateArm._animate(genWorkspace._tarQ[0], genWorkspace._q0);
-  });
-
-
-  animateBtn.on("click", function (event) {
-    event.preventDefault();
-    /* Act on the event */
 
     animateFlag = 1;
   });
