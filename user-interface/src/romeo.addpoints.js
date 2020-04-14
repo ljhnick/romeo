@@ -557,7 +557,7 @@ class AddPoints extends TargetPoints {
 
 	checkLoop() {
 		var dist = this._points[0].pos.distanceTo(this._points[this._points.length-1].pos);
-		if (dist <= 20) {
+		if (dist <= 50) {
 			this._isloop = true;
 		} else {
 			this._isloop = false;

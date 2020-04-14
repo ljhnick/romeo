@@ -42,6 +42,13 @@ q4 = (-pi/2:interval:pi/2)+q0(4);
 q5 = (-pi:interval:0)+q0(5);
 q6 = (-pi/2:interval:pi/2)+q0(6);
 q7 = 0+q0(7);
+
+q1(end+1) = pi/2+q0(1);
+q2(end+1) = pi/2+q0(2);
+q3(end+1) = pi/2+q0(3);
+q4(end+1) = pi/2+q0(4);
+q5(end+1) = 0+q0(5);
+q6(end+1) = pi/2+q0(6);
     
 q = {q1, q2, q3, q4, q5, q6, q7};
 

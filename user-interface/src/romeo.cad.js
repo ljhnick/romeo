@@ -177,7 +177,7 @@ class ObjFixedCAD extends CAD {
 			}
 		}
 		if (intClean.length >= 4) {
-			var holeSizeY = intersects[1].distance - intersects[intersects.length-2].distance;
+			var holeSizeY = intClean[1].distance - intClean[intClean.length-2].distance;
 		} else {
 			var holeSizeY = 0;
 		}
@@ -195,7 +195,7 @@ class ObjFixedCAD extends CAD {
 			}
 		}
 		if (intClean.length >= 4) {
-			var holeSizeX = intersects[1].distance - intersects[intersects.length-2].distance;
+			var holeSizeX = intClean[1].distance - intClean[intClean.length-2].distance;
 		} else {
 			var holeSizeX = 0;
 		}

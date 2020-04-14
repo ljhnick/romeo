@@ -235,8 +235,10 @@ class AxisBboxUI extends BboxUI {
 				var ymin_init = this._bboxInit.cmin.y;
 				var ymax = this._bboxParams.cmax.y;
 				var ymin = this._bboxParams.cmin.y;
+				var lenx = this._bboxParams.lenx;
 				if (ymax < ymax_init && ymin > ymin_init) {
-					var midPillar = new THREE.CylinderGeometry(20, 20, ymax_init-ymin_init);
+					var r = (lenx-70)/2;
+					var midPillar = new THREE.CylinderGeometry(r, r, ymax_init-ymin_init, 32);
 					midPillar.translate(0, this._bboxParams.ctry, 0);
 					transPt = booleanGeo(transPt, midPillar, SUBTRACT);
 				}
