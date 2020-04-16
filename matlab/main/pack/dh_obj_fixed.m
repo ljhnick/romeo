@@ -40,13 +40,20 @@ q0 = [q1_0, q2_0, q3_0, q4_0, q5_0, q6_0, q7_0];
 % -pi/2 < q6 < q6_0
 % q7 = 0
 
-q1 = (-pi/1.5:interval:0)+q0(1);
+q1 = (-pi/1.5:interval:pi/6)+q0(1);
 q2 = (-pi/1.5:interval:0)+q0(2);
-q3 = (-pi/2:interval:pi/2)+q0(3);
+q3 = (-pi/3:interval:pi/3)+q0(3);
 q4 = (-pi:interval:pi)+q0(4);
-q5 = (-pi/1.5:interval:0)+q0(5);
-q6 = (-pi/1.5:interval:0)+q0(6);
+q5 = (-pi/1.5:interval:pi/6)+q0(5);
+q6 = (-pi/1.5:interval:pi/6)+q0(6);
 q7 = 0+q0(7);
+
+q1(end+1) = pi/6+q0(1);
+q2(end+1) = 0+q0(2);
+q3(end+1) = pi/3+q0(3);
+q4(end+1) = pi+q0(4);
+q5(end+1) = pi/6+q0(5);
+q6(end+1) = pi/6+q0(6);
 
 q = {q1, q2, q3, q4, q5, q6, q7};
 

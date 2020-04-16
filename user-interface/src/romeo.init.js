@@ -36,7 +36,7 @@ document.body.appendChild(renderer.domElement);
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
-var gPosCam = new THREE.Vector3(-16, 8, 10);
+var gPosCam = new THREE.Vector3(-4, 6, 10);
 camera.position.copy(gPosCam.clone().multiplyScalar(50));
 var gLookAt = new THREE.Vector3(-25, 0, -0).multiplyScalar(10);
 var gMouseCtrls = new THREE.TrackballControls(camera, undefined, gLookAt); // for mouse control
@@ -154,6 +154,11 @@ var MATERIALYELLOW = new THREE.MeshPhongMaterial({
      opacity: 0.75,
      side: THREE.DoubleSide
 });
+
+var MATERIALRED = new THREE.MeshPhongMaterial({
+     color: 0Xff0000,
+     transparent: false,
+})
 
 var MATERIALOBSTACLE = new THREE.MeshPhongMaterial({
      color: COLORCONTRAST,

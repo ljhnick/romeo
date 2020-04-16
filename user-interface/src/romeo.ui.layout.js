@@ -95,8 +95,11 @@ var objMoveBtn = $(
 );
 specPtBtn.css("border-style", "hidden");
 specPtBtn.css("background-color", "#D9D9D9");
+
 objMoveBtn.css("border-style", "hidden");
 objMoveBtn.css("background-color", "#D9D9D9");
+objMoveBtn.css("display", "none");
+
 objFixBtn.css("border-style", "hidden");
 objFixBtn.css("background-color", "#D9D9D9");
 
@@ -117,7 +120,7 @@ genSpaceBtn.css("background-color", "#D9D9D9");
 
 genSpaceDiv.append(genSpaceBtn);
 
-buttonContainer.append(genSpaceDiv);
+// buttonContainer.append(genSpaceDiv);
 
 // forth button:
 // generate robotic arm
@@ -130,7 +133,7 @@ genArmBtn.css("background-color", "#D9D9D9");
 
 genArmDiv.append(genArmBtn);
 
-buttonContainer.append(genArmDiv);
+// buttonContainer.append(genArmDiv);
 
 // fifth button:
 // animation

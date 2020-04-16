@@ -11,6 +11,7 @@ var ATTACHMENT = 3;
 // object type (1 for object is fix, 2 for object is moving (handheld));
 var OBJFIX = 1;
 var OBJMOV = 2;
+var OBJECTTYPE = OBJFIX;
 
 class TargetPoints {
 	constructor(obj, normal) {
@@ -41,9 +42,10 @@ class TargetPoints {
 
 	_addVerPlane(point) {
 		var normalX = new THREE.Vector3(1, 0, 0);
+		var normalY = new THREE.Vector3(0, 1, 0);
 		var normalZ = new THREE.Vector3(0, 0, 1);
-		if (normalX.dot(this._normal) == 0) {
-			this._verPlNormal = normalX;
+		if (normalY.dot(this._normal) == 0) {
+			this._verPlNormal = normalY;
 		} else {
 			this._verPlNormal = normalZ;
 		}
@@ -99,7 +101,7 @@ class AddPoints extends TargetPoints {
 					scene.remove(this._cubeDraw[0]);
 					scene.remove(this._arrowRef);
 				}
-				var ints = rayCast(e.clientX/0.8, e.clientY, [this._basePlane]);
+				var ints = rayCast(e.clientX/0.7, e.clientY, [this._basePlane]);
 				if (ints.length > 0) {
 					var point = ints[0].point;
 					var cube = new THREE.SphereGeometry(3,32,32);
@@ -128,7 +130,7 @@ class AddPoints extends TargetPoints {
 					scene.remove(this._cubeDraw[0]);
 					scene.remove(this._arrowRef);
 				}
-				var ints = rayCast(e.clientX/0.8, e.clientY, [this._verticalPlane]);
+				var ints = rayCast(e.clientX/0.7, e.clientY, [this._verticalPlane]);
 				if (ints.length > 0) {
 					var cubeNew = this._addAPoint(ints[0].point);
 					scene.add(cubeNew);
@@ -153,7 +155,7 @@ class AddPoints extends TargetPoints {
 					break;
 				}
 				scene.remove(this._sphereOriArrow[0]);
-				var ints = rayCast(e.clientX/0.8, e.clientY, [this._sphereOri]);
+				var ints = rayCast(e.clientX/0.7, e.clientY, [this._sphereOri]);
 				if (ints.length > 0) {
 					var fstPoint = ints[0].point;
 					var center = this._sphereOri.position;
@@ -173,7 +175,7 @@ class AddPoints extends TargetPoints {
 
 			case 'attach':
 				// scene.remove(this._attachSurface);
-				var ints = rayCast(e.clientX/0.8, e.clientY, [this._attachOri]);
+				var ints = rayCast(e.clientX/0.7, e.clientY, [this._attachOri]);
 				if (ints.length > 0) {
 					var fstPoint = ints[0].point;
 					var center = this._attachOri.position;
@@ -194,7 +196,7 @@ class AddPoints extends TargetPoints {
 	mousedown(e) {
 		switch (this._addMode) {
 			case '2d':
-				var ints = rayCast(e.clientX/0.8, e.clientY, [this._basePlane]);
+				var ints = rayCast(e.clientX/0.7, e.clientY, [this._basePlane]);
 				if (ints.length > 0) {
 					this._basePlane.visible = false;
 					// this._grid.visible = false;
@@ -221,7 +223,7 @@ class AddPoints extends TargetPoints {
 				break;
 
 			case '3d':
-				var ints = rayCast(e.clientX/0.8, e.clientY, [this._verticalPlane]);
+				var ints = rayCast(e.clientX/0.7, e.clientY, [this._verticalPlane]);
 				if (ints.length > 0) {
 					var addAPt = this._addAPoint(ints[0].point);
 					addAPt.material = MATERIALSOLID;
@@ -414,6 +416,7 @@ class AddPoints extends TargetPoints {
 		var ints = rayCast(e.clientX, e.clientY, this._pointsMesh);
 		if (ints.length > 0) {
 			var index = ints[0].object.index;
+			ints[0].object.material = MATERIALPOINT;
 			ints[0].object.position.copy(genWorkspace._snapToPoint[index]);
 			this.connectPoints();
 		}
@@ -523,6 +526,11 @@ class AddPoints extends TargetPoints {
 			scene.remove(this._arrowRef);
 		}
 		scene.remove(this._line);
+		scene.remove(this._sphereOri);
+		if (this._points.length != this._pointsMesh.length) {
+			scene.remove(this._pointsMesh[this._pointsMesh.length-1])
+			this._pointsMesh.pop();
+		}
 		this.packData();
 
 	}
@@ -549,7 +557,7 @@ class AddPoints extends TargetPoints {
 
 	checkLoop() {
 		var dist = this._points[0].pos.distanceTo(this._points[this._points.length-1].pos);
-		if (dist <= 20) {
+		if (dist <= 50) {
 			this._isloop = true;
 		} else {
 			this._isloop = false;
@@ -557,6 +565,7 @@ class AddPoints extends TargetPoints {
 	}
 
 	packData() {
+		this._objectType = OBJECTTYPE;
 		var points = this._points;
 		var center = this._basePlane.position;
 		var trnsfmble = {'center': center,

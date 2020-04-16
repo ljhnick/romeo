@@ -38,7 +38,7 @@ function loadStl(data) {
 		var ctr = getBoundingBoxCenter(object);
 
 		var r = Math.max(25, getBoundingSphereRadius(object));
-		camera.position.copy(gPosCam.clone().normalize().multiplyScalar(r * 2));
+		camera.position.copy(gPosCam.clone().normalize().multiplyScalar(r * 3));
 
 		// re-lookAt for the camera
 		gMouseCtrls.target = new THREE.Vector3(0, 0, 0);
