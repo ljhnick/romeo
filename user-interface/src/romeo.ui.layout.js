@@ -53,6 +53,23 @@ restartDiv.append(restartBtn);
 container.append(restartDiv);
 
 /*
+  help button
+*/
+
+var helpDiv = $('<div class="help"></div>');
+var helpBtn = $('<button id="export"><img src="./buttons/help.svg"/></button>');
+helpBtn.css("background-color", "#f2f0f0");
+helpBtn.css("border-style", "hidden");
+
+helpBtn.css("border-style", "hidden");
+helpBtn.css("box-sizing", "border-box");
+helpBtn.css("position", "absolute");
+helpBtn.css("bottom", "2.5em");
+helpBtn.css("right", "2.5em");
+helpDiv.append(helpBtn);
+container.append(helpDiv);
+
+/*
 	4 buttons
 */
 
