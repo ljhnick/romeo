@@ -170,10 +170,10 @@ optionMenu.css("width", "100%");
 optionMenu.css("height", "100%");
 optionMenu.css("top", "0px");
 optionMenuList = $('<ul id="optionMenu"></ul>');
-optionMenuList.append($('<li id="pickplace">pick/place</li>'));
-optionMenuList.append($('<li id="traj">trajectory following</li>'));
+optionMenuList.append($('<li id="pickplace">Pick or place</li>'));
+optionMenuList.append($('<li id="traj">Follow a trajectory</li>'));
 
-optionMenuAttach = $('<li id="attachment">attachment</li>');
+optionMenuAttach = $('<li id="attachment">Attach to a surface</li>');
 optionMenuAttachList = $('<ul id="secondary"></ul>');
 optionMenuAttachList.append(
   $('<li id="att-cyl"><img src="./buttons/cylinder.svg"/></li>')
