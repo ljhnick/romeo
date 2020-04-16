@@ -175,9 +175,15 @@ optionMenuList.append($('<li id="traj">trajectory following</li>'));
 
 optionMenuAttach = $('<li id="attachment">attachment</li>');
 optionMenuAttachList = $('<ul id="secondary"></ul>');
-optionMenuAttachList.append($('<li id="att-cyl">cylinder</li>'));
-optionMenuAttachList.append($('<li id="att-rect">rectangular prism</li>'));
-optionMenuAttachList.append($('<li id="att-flat">flat plane</li>'));
+optionMenuAttachList.append(
+  $('<li id="att-cyl"><img src="./buttons/cylinder.svg"/></li>')
+);
+optionMenuAttachList.append(
+  $('<li id="att-rect"><img src="./buttons/prism.svg"/></li>')
+);
+optionMenuAttachList.append(
+  $('<li id="att-flat"><img src="./buttons/plane.svg"/></li>')
+);
 optionMenuAttach.append(optionMenuAttachList);
 optionMenuList.append(optionMenuAttach);
 
