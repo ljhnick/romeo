@@ -121,7 +121,7 @@ var initPanel = function () {
     gStep = 3;
     tarPoints.endStep();
 
-    
+
     if (genWorkspace != undefined) {
     	genWorkspace.clear();
     }
@@ -242,6 +242,8 @@ var initPanel = function () {
     var link4stl = exporter.parse(animateArm._link4STL, { binary: true });
     var staticstl = exporter.parse(animateArm._staticPt, { binary: true });
 
+    var dataForDeploy = {q0: genWorkspace._q0, tarQ: genWorkspace._tarQ, transPt: tarPoints._bboxParams};
+
     save(
       new Blob([link1stl], { type: "application/octet-stream" }),
       "link1.stl"
@@ -261,6 +263,11 @@ var initPanel = function () {
     save(
       new Blob([staticstl], { type: "application/octet-stream" }),
       "static.stl"
+    );
+
+    save(
+      new Blob([JSON.stringify(dataForDeploy)], { type: "text/plain" }),
+      "data.txt"
     );
 
     gStep = 5;
