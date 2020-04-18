@@ -15,6 +15,7 @@ var tarPoints = [];
 
 // generate workspace
 var genWorkspace;
+var genWorkspaceDisabled = false;
 
 // animate global value
 var animateArm;
@@ -95,11 +96,15 @@ var initPanel = function () {
     if (genWorkspace != undefined) {
     	genWorkspace.clear();
     }
+    if (!genWorkspaceDisabled) {
+      genWorkspace = new Workspace(tarPoints);  
+      objFixBtn.hide();
+      objMoveBtn.show();
+      genWorkspaceDisabled = true;
+    }
+    
 
-    genWorkspace = new Workspace(tarPoints);
-
-    objFixBtn.hide();
-    objMoveBtn.show();
+    
 
   });
 
@@ -126,10 +131,12 @@ var initPanel = function () {
     	genWorkspace.clear();
     }
 
-    genWorkspace = new Workspace(tarPoints);
-
-    objFixBtn.show();
-    objMoveBtn.hide();
+    if (!genWorkspaceDisabled) {
+      genWorkspace = new Workspace(tarPoints);  
+      objFixBtn.show();
+      objMoveBtn.hide();
+      genWorkspaceDisabled = true;
+    }
 
   });
 

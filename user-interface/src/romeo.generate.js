@@ -42,7 +42,7 @@ class Workspace {
 	            _self._recMsgMat = result;
 	            _self._parseMatlabData(result);
 	            _self._generateWorkspace(_self._ws);
-	            
+	            genWorkspaceDisabled = false;
 	        }
 
 	    }

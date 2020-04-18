@@ -41,13 +41,13 @@ camera.position.copy(gPosCam.clone().multiplyScalar(50));
 var gLookAt = new THREE.Vector3(-25, 0, -0).multiplyScalar(10);
 var gMouseCtrls = new THREE.TrackballControls(camera, undefined, gLookAt); // for mouse control
 
-var cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
-var cameraLeft = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
+var cameraTop = new THREE.PerspectiveCamera(10, window.innerWidth / window.innerHeight, 1, 10000);
+var cameraLeft = new THREE.PerspectiveCamera(10, window.innerWidth / window.innerHeight, 1, 10000);
 // var cameraLeft = new THREE.OrthographicCamera(-200, 200, 200, -200, 1, 1000);
 
-cameraTop.position.set(0, 600, 0);
+cameraTop.position.set(0, 2600, 0);
 cameraTop.lookAt(new THREE.Vector3(0,0,0));
-cameraLeft.position.set(-600, 0, 0);
+cameraLeft.position.set(-2600, 0, 0);
 cameraLeft.lookAt(new THREE.Vector3(0,0,0));
 
 //

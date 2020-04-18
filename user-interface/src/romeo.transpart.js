@@ -219,6 +219,56 @@ class AxisBboxUI extends BboxUI {
 
 	endStep() {
 
+		// // compute the bounding box first
+		// var transPartBbox = new THREE.BoxGeometry(this._bboxParams.lenx, this._bboxParams.leny, this._bboxParams.lenz);
+		// var position = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
+		// var transPt = new THREE.Mesh(transPartBbox, MATERIALNORMAL);
+		// transPt.position.copy(position);
+		// var geoObj = new THREE.Geometry().fromBufferGeometry(this._obj.geometry);
+		// var meshObj = new THREE.Mesh(geoObj, MATERIALNORMAL);
+
+		// var tranGeo = booleanGeo(meshObj, transPt.clone(), INTERSECT);
+		// var tranMesh = new THREE.Mesh(tranGeo);
+
+
+		// switch(this._axisSel) {
+		// 	case 'x':
+		// 		break;
+		// 	case 'y':
+		// 		var ymax_init = this._bboxInit.cmax.y;
+		// 		var ymin_init = this._bboxInit.cmin.y;
+		// 		var ymax = this._bboxParams.cmax.y;
+		// 		var ymin = this._bboxParams.cmin.y;
+		// 		var lenx = this._bboxParams.lenx;
+		// 		if (ymax < ymax_init && ymin > ymin_init) {
+		// 			var bboxTransPt = getBoundingBoxEverything(tranMesh);
+
+		// 			var r = (bboxTransPt.lenx-70)/2;
+		// 			var midPillar = new THREE.CylinderGeometry(r, r, ymax_init-ymin_init, 32);
+		// 			midPillar = new THREE.Mesh(midPillar);
+		// 			// midPillar.translate(0, this._bboxParams.ctry, 0);
+		// 			// midPillar.translate(bboxTransPt.ctrx, bboxTransPt.ctry, bboxTransPt.ctrz);
+		// 			midPillar.position.set(bboxTransPt.ctrx, bboxTransPt.ctry, bboxTransPt.ctrz)
+		// 			transPt = booleanGeo(transPt, midPillar, SUBTRACT);
+		// 		}
+		// 		break;
+		// 	case 'z':
+		// 		break;
+		// }
+
+		// var transPart = booleanGeo(meshObj, transPt, INTERSECT);
+		// this._transPt = new THREE.Mesh(transPart, MATERIALNORMAL);
+
+		// this.clearAll();
+
+		// this._staticPt = booleanGeo(meshObj, transPart, SUBTRACT);
+		// this._staticPt = new THREE.Mesh(this._staticPt);
+		// this._staticPt.material = MATERIALOBSTACLE;
+		// scene.add(this._transPt);
+		// scene.add(this._staticPt);
+		// transPtParams.push(this._transPt);
+		// transPtParams.push(this._staticPt);
+
 		// compute the bounding box first
 		var transPartBbox = new THREE.BoxGeometry(this._bboxParams.lenx, this._bboxParams.leny, this._bboxParams.lenz);
 		var position = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
@@ -226,6 +276,14 @@ class AxisBboxUI extends BboxUI {
 		transPt.position.copy(position);
 		var geoObj = new THREE.Geometry().fromBufferGeometry(this._obj.geometry);
 		var meshObj = new THREE.Mesh(geoObj, MATERIALNORMAL);
+
+		var tranBoxGeo = transPartBbox.clone();
+		var tranBoxMesh = new THREE.Mesh(tranBoxGeo);
+		tranBoxMesh.position.copy(position);
+
+		var tranGeo = booleanGeo(meshObj.geometry.clone(), tranBoxMesh, INTERSECT);
+		var tranMesh = new THREE.Mesh(tranGeo);
+
 
 		switch(this._axisSel) {
 			case 'x':
@@ -237,9 +295,10 @@ class AxisBboxUI extends BboxUI {
 				var ymin = this._bboxParams.cmin.y;
 				var lenx = this._bboxParams.lenx;
 				if (ymax < ymax_init && ymin > ymin_init) {
-					var r = (lenx-70)/2;
+					var bboxTransPt = getBoundingBoxEverything(tranMesh);
+					var r = (Math.min(bboxTransPt.lenx, bboxTransPt.lenz)-70)/2;
 					var midPillar = new THREE.CylinderGeometry(r, r, ymax_init-ymin_init, 32);
-					midPillar.translate(0, this._bboxParams.ctry, 0);
+					midPillar.translate(bboxTransPt.ctrx, this._bboxParams.ctry, bboxTransPt.ctrz);
 					transPt = booleanGeo(transPt, midPillar, SUBTRACT);
 				}
 				break;

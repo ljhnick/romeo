@@ -36,6 +36,7 @@ class TargetPoints {
 		var grid = drawGrid(ctry);
 		scene.add(grid);
 
+		this._center = center;
 		this._basePlane = basePlane.m;
 		this._grid = grid;
 	}
@@ -113,7 +114,8 @@ class AddPoints extends TargetPoints {
 					this._cubeDraw[0] = cubeM;
 
 					// add an arrow reference
-					var center = new THREE.Vector3(this._bboxParams.ctrx, this._bboxParams.ctry, this._bboxParams.ctrz);
+					// var center = new THREE.Vector3(this._bboxParams.ctrx, this._grid.position.y, this._bboxParams.ctrz);
+					var center = this._basePlane.position.clone();
 					var length = point.distanceTo(center);
 					var dir = center.sub(point);
 					dir.normalize();
@@ -139,6 +141,8 @@ class AddPoints extends TargetPoints {
 					// add an arrow reference
 					var origin = cubeNew.position.clone();
 					var center = new THREE.Vector3(this._bboxParams.ctrx, origin.y, this._bboxParams.ctrz);
+					// var center = new THREE.Vector3(this._grid.position.x, origin.y, this._grid.position.z);
+					// var center = this._grid.position.clone();
 					var length = origin.distanceTo(center);
 					var dir = center.sub(origin);
 					var hex = 0x000000;
@@ -266,11 +270,15 @@ class AddPoints extends TargetPoints {
 				this._oriArrow.push(this._sphereOriArrow);
 				this._sphereOriArrow = [];
 				this._addMode = 'option';
+				this._basePlane.position.copy(this._pointsMesh[this._pointsMesh.length-1].position);
+				this._grid.position.y = this._basePlane.position.y;
 				break;
 
 			case 'option':
 				this._basePlane.visible = true;
+				// this._basePlane.position.copy(this._pointsMesh[this._pointsMesh.length-1].position);
 				this._grid.visible = true;
+				// this._grid.position.copy(this._basePlane.position);
 				break;
 
 			case 'attach':
@@ -567,7 +575,7 @@ class AddPoints extends TargetPoints {
 	packData() {
 		this._objectType = OBJECTTYPE;
 		var points = this._points;
-		var center = this._basePlane.position;
+		var center = this._center;
 		var trnsfmble = {'center': center,
 						 'lenx': this._bboxParams.lenx,
 						 'leny': this._bboxParams.leny,
