@@ -146,7 +146,7 @@ function ljhShellMesh(mesh, parentMesh) {
 }
 
 function ljhCylinderMesh(center, radius, depth) {
-	var geo = new THREE.CylinderGeometry(radius, radius, depth, 8);
+	var geo = new THREE.CylinderGeometry(radius, radius, depth, 32);
 	geo.center();
 	geo.rotateX(Math.PI/2);
 	var mesh = new THREE.Mesh(geo);
@@ -162,7 +162,7 @@ function ljhCylinderMeshFromPoint(x, y, zmin, zmax, radius) {
 
 function ljhCylinderMeshX(y, z, xmin, xmax, radius) {
 	var depth = xmax - xmin;
-	var geo = new THREE.CylinderGeometry(radius, radius, depth, 8);
+	var geo = new THREE.CylinderGeometry(radius, radius, depth, 32);
 	geo.center();
 	geo.rotateZ(-Math.PI/2);
 	var center = new THREE.Vector3((xmin+xmax)/2, y, z);
@@ -173,7 +173,7 @@ function ljhCylinderMeshX(y, z, xmin, xmax, radius) {
 
 function ljhCylinderMeshY(x, z, ymin, ymax, radius) {
 	var depth = ymax - ymin;
-	var geo = new THREE.CylinderGeometry(radius, radius, depth, 8);
+	var geo = new THREE.CylinderGeometry(radius, radius, depth, 32);
 	geo.center();
 	var center = new THREE.Vector3(x, (ymin+ymax)/2, z);
 	var mesh = new THREE.Mesh(geo);

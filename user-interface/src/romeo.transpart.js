@@ -32,6 +32,7 @@ class BboxUI {
 		pl.m.position.copy(new THREE.Vector3(cx, cy, cz));
 		scene.add(pl.m);
 		pl.m.selector = this;
+		pl.m.renderOrder = 1;
 		return pl.m;
 	}
 

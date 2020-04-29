@@ -331,8 +331,9 @@ class ObjFixedCAD extends CAD {
 		var motor3 = new THREE.Mesh(this._motor.geometry.clone(), MATERIALOBSTACLE);
 		var motor4 = new THREE.Mesh(this._motor.geometry.clone(), MATERIALOBSTACLE);
 
+		var zOff = this._bboxParamsNew.lenz/2;
 		motor1.geometry.rotateZ(-Math.PI/2);
-		motor1.geometry.translate(-9, 0, -12);
+		motor1.geometry.translate(-9, 0, -15-zOff);
 		switch (this._jtType) {
 			case 1:
 				motor2.geometry.rotateY(Math.PI/2);
@@ -934,11 +935,11 @@ class ObjFixedCAD extends CAD {
 			var pvtY = pivot.position.y;
 			var pvtZ = pivot.position.z;
 
-			var motorShell = ljhBoxMeshFromPoints(pvtX-9, pvtX+27, pvtY+12, pvtY+14, pvtZ-12, pvtZ+12);
+			var motorShell = ljhBoxMeshFromPoints(pvtX-9, pvtX+29, 0, pvtY+14, pvtZ-12, pvtZ+12);
 			LINK = booleanGeo(LINK, motorShell, UNION);
 
 			// sceond step: subtract motor
-			var motor = ljhBoxMeshFromPoints(Math.min(xmin, pvtX-12), pvtX+29, Math.min(ymin, pvtY-20), pvtY+12, Math.min(zmin,pvtZ-12-5), Math.max(zmax, pvtZ+15+5));
+			var motor = ljhBoxMeshFromPoints(Math.min(xmin, pvtX-12), pvtX+27, Math.min(ymin, pvtY-20), pvtY+12, Math.min(zmin,pvtZ-12-5), Math.max(zmax, pvtZ+15+5));
 			LINK = booleanGeo(LINK, motor, SUBTRACT);
 		}
 
@@ -1431,7 +1432,7 @@ class ObjMovingCAD extends CAD {
 		LINK = booleanGeo(LINK, motorShell, UNION);
 
 		// sceond step: subtract motor
-		var motor = ljhBoxMeshFromPoints(pvtX-12, pvtX+12, pvtY-9, pvtY+27, pvtZ-12-5, pvtZ+15+5);
+		var motor = ljhBoxMeshFromPoints(pvtX-12, pvtX+12, Math.min(pvtY-9, ymin), pvtY+27, pvtZ-12-5, pvtZ+15+5);
 		LINK = booleanGeo(LINK, motor, SUBTRACT);
 
 		// third step: round corner

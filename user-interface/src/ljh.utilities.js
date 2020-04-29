@@ -289,6 +289,16 @@ function findObstacle (target, obj, normal) {
 			}
 			break;
 	}
+
+	// delete later
+	obs = [];
+	var obs0 = {'xmax': 10,
+				'xmin': -10,
+				'ymax': 100,
+				'ymin': 10,
+				'zmax': 10,
+				'zmin': -10};
+	obs.push(obs0);
 	return obs;
 }
 

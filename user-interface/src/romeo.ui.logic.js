@@ -90,6 +90,11 @@ var initPanel = function () {
     /* Act on the event */
     OBJECTTYPE = OBJFIX;
 
+    if (gStep == 4) {
+      scene.remove(animateArm._base);
+      animateFlag = 0;
+    }
+
     gStep = 3;
     tarPoints.endStep();
 
@@ -122,6 +127,11 @@ var initPanel = function () {
     event.preventDefault();
     /* Act on the event */
     OBJECTTYPE = OBJMOV;
+
+    if (gStep == 4) {
+      scene.remove(animateArm._base);
+      animateFlag = 0;
+    }
 
     gStep = 3;
     tarPoints.endStep();
@@ -249,7 +259,7 @@ var initPanel = function () {
     var link4stl = exporter.parse(animateArm._link4STL, { binary: true });
     var staticstl = exporter.parse(animateArm._staticPt, { binary: true });
 
-    var dataForDeploy = {q0: genWorkspace._q0, tarQ: genWorkspace._tarQ, transPt: tarPoints._bboxParams};
+    var dataForDeploy = {q0: genWorkspace._q0, tarQ: genWorkspace._tarQ, transPt: tarPoints._bboxParams, tarPoints: tarPoints._points};
 
     save(
       new Blob([link1stl], { type: "application/octet-stream" }),
