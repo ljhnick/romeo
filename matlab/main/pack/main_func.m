@@ -48,15 +48,20 @@ if IFSTRIP == 0
     end
     
 elseif IFSTRIP == 1
+    if type == 1
+        P0 = [0, -width/2, 0];
+        [DH, q0, q] = dh_obj_stripfixed(length, width);
+    end
     if type == 2
         P0 = [0, 0, width/2];
+        [DH, q0, q] = dh_obj_strip(length, width);
     end
     
 %     for i = 1:numel(target_points)
 %         target_points{i} = target_points{i}-P0;
 %     end
     
-    [DH, q0, q] = dh_obj_strip(length, width);
+    
 end
 
 % trans_arm = SerialLink(DH);

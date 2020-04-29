@@ -14,6 +14,7 @@ var tarPoints = [];
 
 // generate workspace
 var genWorkspace;
+var genWorkspaceDisabled = false;
 
 // animate global value
 var animateArm;
@@ -87,17 +88,25 @@ var initPanel = function () {
     /* Act on the event */
     OBJECTTYPE = OBJFIX;
 
+    if (gStep == 4) {
+      scene.remove(animateArm._base);
+      animateFlag = 0;
+    }
+
     gStep = 3;
     tarPoints.endStep();
 
     if (genWorkspace != undefined) {
       genWorkspace.clear();
     }
+    if (!genWorkspaceDisabled) {
+      genWorkspace = new Workspace(tarPoints);  
+      objFixBtn.hide();
+      objMoveBtn.show();
+      genWorkspaceDisabled = true;
+    }
+    
 
-    genWorkspace = new Workspace(tarPoints);
-
-    objFixBtn.hide();
-    objMoveBtn.show();
   });
 
   objFixBtn.on("mousedown", function (event) {
@@ -114,6 +123,11 @@ var initPanel = function () {
     /* Act on the event */
     OBJECTTYPE = OBJMOV;
 
+    if (gStep == 4) {
+      scene.remove(animateArm._base);
+      animateFlag = 0;
+    }
+
     gStep = 3;
     tarPoints.endStep();
 
@@ -121,10 +135,13 @@ var initPanel = function () {
       genWorkspace.clear();
     }
 
-    genWorkspace = new Workspace(tarPoints);
+    if (!genWorkspaceDisabled) {
+      genWorkspace = new Workspace(tarPoints);  
+      objFixBtn.show();
+      objMoveBtn.hide();
+      genWorkspaceDisabled = true;
+    }
 
-    objFixBtn.show();
-    objMoveBtn.hide();
   });
 
   objMoveBtn.on("mousedown", function (event) {
@@ -234,6 +251,8 @@ var initPanel = function () {
     var link4stl = exporter.parse(animateArm._link4STL, { binary: true });
     var staticstl = exporter.parse(animateArm._staticPt, { binary: true });
 
+    var dataForDeploy = {q0: genWorkspace._q0, tarQ: genWorkspace._tarQ, transPt: tarPoints._bboxParams, tarPoints: tarPoints._points};
+
     save(
       new Blob([link1stl], { type: "application/octet-stream" }),
       "link1.stl"
@@ -253,6 +272,11 @@ var initPanel = function () {
     save(
       new Blob([staticstl], { type: "application/octet-stream" }),
       "static.stl"
+    );
+
+    save(
+      new Blob([JSON.stringify(dataForDeploy)], { type: "text/plain" }),
+      "data.txt"
     );
 
     gStep = 5;
