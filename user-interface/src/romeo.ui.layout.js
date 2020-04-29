@@ -39,7 +39,7 @@ container.append(title);
 */
 var restartDiv = $('<div class="restart"></div>');
 var restartBtn = $(
-  '<button id="export"><img src="./buttons/back.svg"/></button>'
+  '<button id="export"><img src="./buttons/back.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 restartBtn.css("background-color", "#f2f0f0");
 restartBtn.css("border-style", "hidden");
@@ -51,23 +51,6 @@ restartBtn.css("top", "7.5em");
 restartBtn.css("left", "2.5em");
 restartDiv.append(restartBtn);
 container.append(restartDiv);
-
-/*
-  help button
-*/
-
-var helpDiv = $('<div class="help"></div>');
-var helpBtn = $('<button id="export"><img src="./buttons/help.svg"/></button>');
-helpBtn.css("background-color", "#f2f0f0");
-helpBtn.css("border-style", "hidden");
-
-helpBtn.css("border-style", "hidden");
-helpBtn.css("box-sizing", "border-box");
-helpBtn.css("position", "absolute");
-helpBtn.css("bottom", "2.5em");
-helpBtn.css("right", "2.5em");
-helpDiv.append(helpBtn);
-container.append(helpDiv);
 
 /*
 	4 buttons
@@ -89,7 +72,7 @@ container.append(buttonContainer);
 // select transformable parts
 var selTransPtDiv = $('<div class="transPt"></div>');
 var selTransPtBtn = $(
-  '<button id="transPt"><img src = "./buttons/transformable.svg"/></button>'
+  '<button id="transPt"><img src = "./buttons/transformable.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 selTransPtBtn.css("border-style", "hidden");
 selTransPtBtn.css("background-color", "#D9D9D9");
@@ -102,13 +85,13 @@ buttonContainer.append(selTransPtDiv);
 // specify spatial point
 var specPtDiv = $('<div class="specPt"></div>');
 var specPtBtn = $(
-  '<button id="specPt"><img src = "./buttons/point.svg"/></button>'
+  '<button id="specPt"><img src = "./buttons/point.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 var objFixBtn = $(
-  '<button id="specPt"><img src = "./buttons/objFixed.svg"/></button>'
+  '<button id="specPt"><img src = "./buttons/objFixed.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 var objMoveBtn = $(
-  '<button id="specPt"><img src = "./buttons/objMoving.svg"/></button>'
+  '<button id="specPt"><img src = "./buttons/objMoving.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 specPtBtn.css("border-style", "hidden");
 specPtBtn.css("background-color", "#D9D9D9");
@@ -130,7 +113,7 @@ buttonContainer.append(specPtDiv);
 // generate workspace
 var genSpaceDiv = $('<div class="genSpace"></div>');
 var genSpaceBtn = $(
-  '<button id="genSpace"><img src="./buttons/generate.svg"/></button>'
+  '<button id="genSpace"><img src="./buttons/generate.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 genSpaceBtn.css("border-style", "hidden");
 genSpaceBtn.css("background-color", "#D9D9D9");
@@ -143,7 +126,7 @@ genSpaceDiv.append(genSpaceBtn);
 // generate robotic arm
 var genArmDiv = $('<div class="genArm"></div>');
 var genArmBtn = $(
-  '<button id="genArm"><img src="./buttons/generateArm.svg"/></button>'
+  '<button id="genArm"><img src="./buttons/generateArm.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 genArmBtn.css("border-style", "hidden");
 genArmBtn.css("background-color", "#D9D9D9");
@@ -157,7 +140,7 @@ genArmDiv.append(genArmBtn);
 var animateDiv = $('<div class="animate"></div>');
 
 var animateBtn = $(
-  '<button id="animate"><img src="./buttons/start.svg"/></button>'
+  '<button id="animate"><img src="./buttons/start.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 animateBtn.css("border-style", "hidden");
 animateBtn.css("background-color", "#D9D9D9");
@@ -171,7 +154,7 @@ buttonContainer.append(animateDiv);
 // export
 var exportDiv = $('<div class="export"></div>');
 var exportBtn = $(
-  '<button id="export"><img src="./buttons/export.svg"/></button>'
+  '<button id="export"><img src="./buttons/export.svg" title="TEST HOVER - TYPE IN HELP INSTRUCTIONS"/></button>'
 );
 exportBtn.css("border-style", "hidden");
 exportBtn.css("background-color", "#D9D9D9");
